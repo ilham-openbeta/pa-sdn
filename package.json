@@ -1,13 +1,16 @@
 {
-  "name": "vis-test",
+  "name": "proyek-akhir",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aplikasi monitoring SDN",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "influx": "^5.4.1",
     "mongodb": "^3.3.0-beta2",
+    "socket.io": "^2.2.0",
     "vis": "^4.21.0"
   },
   "devDependencies": {

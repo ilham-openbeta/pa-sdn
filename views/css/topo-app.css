@@ -1,0 +1,48 @@
+.vis-network {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 90vh;
+}
+
+.overlay {
+    padding: 15px;
+    position: absolute;
+    display: block;
+    top: 50px;
+    right: 25px;
+    border: 1px solid rgb(235, 235, 235);
+    background-color: skyblue;
+    font-size: 0.8rem;
+}
+
+.kotak-teks {
+    font-size: 0.8rem;
+    position: relative;
+    display: inline-block;
+    line-height: 20px;
+    text-align: center;
+    float: left;
+    width: 65px;
+}
+
+.kotak-warna {
+    margin: 3px;
+    float: left;
+    width: 20px;
+    height: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.kotak {
+    font-size: 0.9rem;
+    bottom: 20px;
+    left: 20px;
+    width: 100px;
+    height: 120px;
+    position: absolute;
+    display: block;
+    background-color: white;
+    border: 1px solid black;
+}

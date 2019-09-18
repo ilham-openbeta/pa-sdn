@@ -1,0 +1,15 @@
+module.exports = Object.freeze({
+    CONTROLLER_IP: "192.168.111.1",
+    CONTROLLER_PORT: "8181",
+    CONTROLLER_USER: "onos",
+    CONTROLLER_PASS: "rocks",
+    CONTROLLER_POLLING_INTERVAL: 5000,
+    SFLOW_IP: "192.168.111.1",
+    SFLOW_PORT: "8008",
+    SFLOW_POLLING_INTERVAL: 10000,
+    DATABASE_IP: "127.0.0.1",
+    DATABASE_PORT: "8086",
+    DATABASE_NAME: "sdn_metrics",
+    DATABASE_USER: "",
+    DATABASE_PASS: ""
+});
