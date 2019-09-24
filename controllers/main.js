@@ -30,12 +30,6 @@ module.exports = function (params) {
         onos.get_links().then(res => { socket.emit("links", res) }).catch(err => console.log("ONOS Timeout"))
         onos.get_hosts().then(res => { socket.emit("hosts", res) }).catch(err => console.log("ONOS Timeout"))
         influx.get_metrics().then(res => { socket.emit("init", res) }).catch(err => console.log("Influx Timeout"))
-
-        socket.on("laporan", data => {
-//proses data sesuai table
-//ambil data influx
-            socket.emit("", aaaaaa)
-        })
     });
     onos_service();
     sflow_service();

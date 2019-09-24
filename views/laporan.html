@@ -66,32 +66,33 @@
             </select>
             <br> <input type="radio" name="periode" id="periode" value="b">
             Jangka waktu dari <input type="date" name="dari" id="dari"> hingga <input type="date" name="ke" id="ke">
-            <br> <button type="button" class="btn btn-primary">Go</button>
+            <br> <button type="button" class="btn btn-primary" onclick="buat_tabel()">Go</button>
             <br>
-
-            <br> DPID : 0000d2f04eaeca4e
-            <br> IP Address : 192.168.111.1
-            <br> Link Speed : 10 Mbps
-            <table>
-                <tr>
-                    <th rowspan="2">Port</th>
-                    <th colspan="3">Throughput (KB/s) / Utilization (%)</th>
-                    <th rowspan="2">Total Bytes</th>
-                </tr>
-                <tr>
-                    <th>Max</th>
-                    <th>Min</th>
-                    <th>Avg</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>5000 (100%)</td>
-                    <td>0 (0%)</td>
-                    <td>2500 (50%)</td>
-                    <td>10 MB</td>
-                </tr>
-            </table>
-            <br><button type="button" class="btn btn-primary">Cetak Laporan</button>
+            <div class="daftar-sw">
+                <br> DPID : 0000d2f04eaeca4e
+                <br> IP Address : 192.168.111.1
+                <br> Link Speed : 10 Mbps
+                <table>
+                    <tr>
+                        <th rowspan="2">Port</th>
+                        <th colspan="3">Throughput (KB/s) / Utilization (%)</th>
+                        <th rowspan="2">Total Bytes</th>
+                    </tr>
+                    <tr>
+                        <th>Max</th>
+                        <th>Min</th>
+                        <th>Avg</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>5000 (100%)</td>
+                        <td>0 (0%)</td>
+                        <td>2500 (50%)</td>
+                        <td>10 MB</td>
+                    </tr>
+                </table>
+                <br><button type="button" class="btn btn-primary">Cetak Laporan</button>
+            </div>
         </div>
     </div>
 </body>

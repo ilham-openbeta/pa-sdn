@@ -37,7 +37,9 @@ function insert_metrics(data) {
           measurement: 'throughput',
           tags: {
             dpid: data[i].of_dpid,
-            port: data[i].of_port
+            port: data[i].of_port,
+            ip: data[i].ip,
+            ifspeed: data[i].ifspeed
           },
           fields: {
             ifinutilization: data[i].ifinutilization,
@@ -53,7 +55,7 @@ function insert_metrics(data) {
 
 function get_metrics() {
   return db_cek().then(() => {
-    return influx.query('select time,dpid,port,ifinoctets,ifoutoctets from throughput')
+    return influx.query('select time,dpid,port,ifinoctets,ifoutoctets,ifspeed,ip from throughput')
   })
 }
 

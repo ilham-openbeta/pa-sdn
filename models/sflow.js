@@ -20,7 +20,8 @@ async function restcon(api, method = "GET") {
 //     ifinutilization: ,
 //     ifoututilization: ,
 //     ifinoctets: ,
-//     ifoutoctets:
+//     ifoutoctets: ,
+//     ifspeed: 
 // }, ...
 //]
 function get_metrics() {

@@ -167,11 +167,11 @@ $(function () {
         }
       });
       let total;
-      if(util){
+      if (util) {
         total = data[i].ifinutilization + data[i].ifoututilization;
       } else {
         total_throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000)
-        total = total_throughput/max_kbps*100
+        total = total_throughput / max_kbps * 100
       }
       //atur warna link
       if (link.length > 0) {
@@ -202,8 +202,8 @@ $(function () {
   network = new vis.Network(container, data, options);
   network.on("afterDrawing", function (params) {
     $('.kotak').remove();
-    let html = 
-    '<div class="kotak">' + "&nbsp;Keterangan :" +
+    let html =
+      '<div class="kotak">' + "&nbsp;Keterangan :" +
       '<div class="kotak-warna" style="background-color: #FF0000;"></div>' +
       '<div class="kotak-teks">80 - 100 %</div>' +
       '<div class="kotak-warna" style="background-color: #FF8000;"></div>' +
@@ -214,7 +214,7 @@ $(function () {
       '<div class="kotak-teks">20 - 40 %</div>' +
       '<div class="kotak-warna" style="background-color: #007FFF;"></div>' +
       '<div class="kotak-teks">0 - 20 %</div>' +
-    '</div>'
+      '</div>'
     $('.vis-network').append(html);
   })
   network.on("click", function (params) {
@@ -287,5 +287,39 @@ $(function () {
     if (params.iterations > 10) {
       network.setOptions({ physics: false });
     }
+  });
+
+  // Web Socket error handling
+
+  socket.on('connect_error', (error) => {
+    console.log("Connect Error: " + error)
+  });
+
+  socket.on('connect_timeout', (timeout) => {
+    console.log("Connecting timeout: " + timeout)
+  });
+
+  socket.on('error', (error) => {
+    console.log("Error: " + error)
+  });
+
+  socket.on('disconnect', (reason) => {
+    if (reason === 'io server disconnect') {
+      console.log("Server Disconnected")
+      socket.connect();
+    }
+    console.log("Disconnected")
+  });
+
+  socket.on('reconnect', (attemptNumber) => {
+    console.log("Reconnecting ...")
+  });
+
+  socket.on('reconnect_error', (error) => {
+    console.log("Reconnect Error: " + error)
+  });
+
+  socket.on('reconnect_failed', () => {
+    console.log("Gagal Reconnect")
   });
 });
