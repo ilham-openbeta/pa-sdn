@@ -8,12 +8,11 @@
     <title>
         Sistem Pemantauan
     </title>
-    <link rel="stylesheet" type="text/css" href="/css/lib/vis-network.min.css">
     <link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.min.css">
     <script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/lib/vis-network.min.js"></script>
     <script type="text/javascript" src="/js/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/js/laporan-app.js"></script>
 </head>
 
 <body>
@@ -43,8 +42,15 @@
         table,
         th,
         td {
+            padding: 7px;
             border: 1px solid black;
             border-collapse: collapse;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
 
@@ -53,46 +59,25 @@
             <br>
             <b>Summary Report</b>
             <hr style='margin:0.5em 0;border: 1px solid black'>
-            <br> Jumlah Switch Terhubung : 7
-            <br> Jumlah Host Terhubung : 4
-            <br> Jumlah Link : 21
-
-            <br>
-            <br>Tampilkan Laporan
-            <br> <input type="radio" name="periode" id="periode" value="a">
-            Periode
-            <select name="per" id="per">
-                <option value="1">Bulan ini</option>
-            </select>
-            <br> <input type="radio" name="periode" id="periode" value="b">
-            Jangka waktu dari <input type="date" name="dari" id="dari"> hingga <input type="date" name="ke" id="ke">
-            <br> <button type="button" class="btn btn-primary" onclick="buat_tabel()">Go</button>
-            <br>
-            <div class="daftar-sw">
-                <br> DPID : 0000d2f04eaeca4e
-                <br> IP Address : 192.168.111.1
-                <br> Link Speed : 10 Mbps
-                <table>
-                    <tr>
-                        <th rowspan="2">Port</th>
-                        <th colspan="3">Throughput (KB/s) / Utilization (%)</th>
-                        <th rowspan="2">Total Bytes</th>
-                    </tr>
-                    <tr>
-                        <th>Max</th>
-                        <th>Min</th>
-                        <th>Avg</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>5000 (100%)</td>
-                        <td>0 (0%)</td>
-                        <td>2500 (50%)</td>
-                        <td>10 MB</td>
-                    </tr>
-                </table>
-                <br><button type="button" class="btn btn-primary">Cetak Laporan</button>
+            <br> Jumlah Switch Terhubung : <span id="1"> 0 </span>
+            <br> Jumlah Host Terhubung : <span id="2"> 0 </span>
+            <br> Jumlah Link : <span id="3"> 0 </span>
+            <div class="no-print">
+                <br>Tampilkan Laporan :
+                <br> <input type="radio" name="periode" id="periode" value="a" checked="checked">
+                Periode
+                <select name="per" id="per">
+                    <option value="1" selected>Hari ini</option>
+                    <option value="2">1 Minggu Terakhir</option>
+                    <option value="3">1 Bulan Terakhir</option>
+                    <option value="4">1 Tahun Terakhir</option>
+                </select>
+                <br> <input type="radio" name="periode" id="periode" value="b">
+                Jangka waktu dari <input type="date" name="dari" id="dari"> hingga <input type="date" name="ke" id="ke">
+                <br> <button type="button" class="btn btn-primary" onclick="buat_tabel()">Go</button>
             </div>
+            <br>
+            <div class="daftar-sw"></div>
         </div>
     </div>
 </body>

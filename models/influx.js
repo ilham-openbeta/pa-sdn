@@ -14,19 +14,21 @@ function db_cek() {
       }
     })
     .catch(err => {
-      console.error('Gagal membuat database ' + err.stack);
+      console.error(new Date() + "[InfluxDB] Gagal membuat database");
     })
 }
 
 //insert_metrics : masukkan metric ke database dengan syarat format data sebagai berikut
 //[
 // { 
+//     ip: ,
 //     of_dpid: ,
 //     of_port: ,
 //     ifinutilization: ,
 //     ifoututilization: ,
 //     ifinoctets: ,
-//     ifoutoctets:
+//     ifoutoctets: ,
+//     ifspeed: 
 // }, ...
 //]
 function insert_metrics(data) {
@@ -50,13 +52,13 @@ function insert_metrics(data) {
         }
       ])
     }
-  })
+  }).catch(err => console.error(new Date() + "[InfluxDB] Gagal memasukkan data ke database"))
 }
 
 function get_metrics() {
   return db_cek().then(() => {
-    return influx.query('select time,dpid,port,ifinoctets,ifoutoctets,ifspeed,ip from throughput')
-  })
+    return influx.query('select time,dpid,port,ifinoctets,ifoutoctets,ifspeed,ip,ifinutilization,ifoututilization from throughput')
+  }).catch(err => console.error(new Date() + "[InfluxDB] Gagal mengambil data dari database"))
 }
 
 module.exports = {

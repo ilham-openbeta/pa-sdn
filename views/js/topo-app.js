@@ -43,152 +43,160 @@ var max_kbps = 50000;
 $(function () {
   //ambil daftar perangkat switch
   socket.on("nodes", function (data) {
-    let group = nodes.get({
-      filter: function (item) {
-        return (item.group == "switch");
-      }
-    });
-    //jika jumlahnya berbeda maka buat ulang daftar perangkat
-    if (data.length != group.length) {
-      nodes.remove(group);
-      network.setOptions({ physics: true });
-      for (i in data) {
-        nodes.add(
-          {
-            id: data[i].id,
-            label: data[i].id,
-            group: "switch",
-            detail: data[i]
-          }
-        );
+    if (data) {
+      let group = nodes.get({
+        filter: function (item) {
+          return (item.group == "switch");
+        }
+      });
+      //jika jumlahnya berbeda maka buat ulang daftar perangkat
+      if (data.length != group.length) {
+        nodes.remove(group);
+        network.setOptions({ physics: true });
+        for (i in data) {
+          nodes.add(
+            {
+              id: data[i].id,
+              label: data[i].id,
+              group: "switch",
+              detail: data[i]
+            }
+          );
+        }
       }
     }
   });
 
   //ambil daftar link antar switch
   socket.on("links", function (data) {
-    let group = edges.get({
-      filter: function (item) {
-        return (item.group == "link-switch");
-      }
-    });
-    //jika jumlahnya berbeda maka buat ulang daftar link
-    if (data.length != group.length) {
-      edges.remove(group);
-      let arr = ""
-      if (arrows) {
-        arr = "to"
-      }
-      for (i in data) {
-        edges.add({
-          id: data[i].id,
-          from: data[i].from,
-          to: data[i].to,
-          group: "link-switch",
-          arrows: arr,
-          detail: data[i]
-        });
+    if (data) {
+      let group = edges.get({
+        filter: function (item) {
+          return (item.group == "link-switch");
+        }
+      });
+      //jika jumlahnya berbeda maka buat ulang daftar link
+      if (data.length != group.length) {
+        edges.remove(group);
+        let arr = ""
+        if (arrows) {
+          arr = "to"
+        }
+        for (i in data) {
+          edges.add({
+            id: data[i].id,
+            from: data[i].from,
+            to: data[i].to,
+            group: "link-switch",
+            arrows: arr,
+            detail: data[i]
+          });
+        }
       }
     }
   });
 
   //ambil daftar host
   socket.on("hosts", function (data) {
-    let group = nodes.get({
-      filter: function (item) {
-        return (item.group == "host");
+    if (data) {
+      let group = nodes.get({
+        filter: function (item) {
+          return (item.group == "host");
+        }
+      });
+      //jika jumlah perangkat host berbeda maka buat ulang daftar host
+      if (data.length != group.length) {
+        nodes.remove(group);
+        network.setOptions({ physics: true });
+        for (i in data) {
+          nodes.add(
+            {
+              id: data[i].mac,
+              label: data[i].mac,
+              group: "host",
+              detail: data[i]
+            }
+          );
+        }
       }
-    });
-    //jika jumlah perangkat host berbeda maka buat ulang daftar host
-    if (data.length != group.length) {
-      nodes.remove(group);
-      network.setOptions({ physics: true });
-      for (i in data) {
-        nodes.add(
-          {
+      group = edges.get({
+        filter: function (item) {
+          return (item.group == "link-host");
+        }
+      });
+      //jika jumlah link antar host berbeda maka buat ulang daftar link
+      if (data.length != group.length) {
+        edges.remove(group);
+        let arr = ""
+        if (arrows) {
+          arr = "from"
+        }
+        for (i in data) {
+          edges.add({
             id: data[i].mac,
-            label: data[i].mac,
-            group: "host",
-            detail: data[i]
-          }
-        );
-      }
-    }
-    group = edges.get({
-      filter: function (item) {
-        return (item.group == "link-host");
-      }
-    });
-    //jika jumlah link antar host berbeda maka buat ulang daftar link
-    if (data.length != group.length) {
-      edges.remove(group);
-      let arr = ""
-      if (arrows) {
-        arr = "from"
-      }
-      for (i in data) {
-        edges.add({
-          id: data[i].mac,
-          from: data[i].mac,
-          to: data[i].to,
-          arrows: arr,
-          group: "link-host"
-        });
+            from: data[i].mac,
+            to: data[i].to,
+            arrows: arr,
+            group: "link-host"
+          });
+        }
       }
     }
   });
 
   //ambil daftar nilai througput perangkat
   socket.on("metrics", function (data) {
-    let temp = edges.get();
-    //reset warna link
-    for (i in temp) {
-      edges.update({ id: temp[i].id, width: 3, color: { color: "#007FFF" } });
-      if (speed) {
-        edges.update({ id: temp[i].id, label: "0 KB/s" });
-      }
-    }
-    for (i in data) {
-      let link = edges.get({
-        filter: function (item) {
-          if (item.group == "link-switch") {
-            if ((item.detail.from == ("of:" + data[i].of_dpid)) && (item.detail.from_port == data[i].of_port) ||
-              ((item.detail.to == ("of:" + data[i].of_dpid)) && (item.detail.to_port == data[i].of_port))
-            ) {
-              return true;
-            }
-          } else if (item.group == "link-host") {
-            if ((item.to == ("of:" + data[i].of_dpid)) && (nodes.get(item.id).detail.to_port == data[i].of_port)) {
-              return true;
-            }
-          } else {
-            return false;
-          }
-        }
-      });
-      let total;
-      if (util) {
-        total = data[i].ifinutilization + data[i].ifoututilization;
-      } else {
-        total_throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000)
-        total = total_throughput / max_kbps * 100
-      }
-      //atur warna link
-      if (link.length > 0) {
+    if (data) {
+      let temp = edges.get();
+      //reset warna link
+      for (i in temp) {
+        edges.update({ id: temp[i].id, width: 3, color: { color: "#007FFF" } });
         if (speed) {
-          let throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000) + " KB/s";
-          edges.update({ id: link[0].id, label: throughput })
+          edges.update({ id: temp[i].id, label: "0 KB/s" });
         }
-        if (total > 80) {
-          edges.update({ id: link[0].id, width: 7, color: { color: "#FF0000" } })
-        } else if (total > 60) {
-          edges.update({ id: link[0].id, width: 6, color: { color: "#FF8000" } })
-        } else if (total > 40) {
-          edges.update({ id: link[0].id, width: 5, color: { color: "#FFFF00" } })
-        } else if (total > 20) {
-          edges.update({ id: link[0].id, width: 4, color: { color: "#80FF00" } })
-        } else if (total > 0) {
-          edges.update({ id: link[0].id, width: 3, color: { color: "#007FFF" } })
+      }
+      for (i in data) {
+        let link = edges.get({
+          filter: function (item) {
+            if (item.group == "link-switch") {
+              if ((item.detail.from == ("of:" + data[i].of_dpid)) && (item.detail.from_port == data[i].of_port) ||
+                ((item.detail.to == ("of:" + data[i].of_dpid)) && (item.detail.to_port == data[i].of_port))
+              ) {
+                return true;
+              }
+            } else if (item.group == "link-host") {
+              if ((item.to == ("of:" + data[i].of_dpid)) && (nodes.get(item.id).detail.to_port == data[i].of_port)) {
+                return true;
+              }
+            } else {
+              return false;
+            }
+          }
+        });
+        let total;
+        if (util) {
+          total = data[i].ifinutilization + data[i].ifoututilization;
+        } else {
+          total_throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000)
+          total = total_throughput / max_kbps * 100
+        }
+        //atur warna link
+        if (link.length > 0) {
+          if (speed) {
+            let throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000) + " KB/s";
+            edges.update({ id: link[0].id, label: throughput })
+          }
+          if (total > 80) {
+            edges.update({ id: link[0].id, width: 7, color: { color: "#FF0000" } })
+          } else if (total > 60) {
+            edges.update({ id: link[0].id, width: 6, color: { color: "#FF8000" } })
+          } else if (total > 40) {
+            edges.update({ id: link[0].id, width: 5, color: { color: "#FFFF00" } })
+          } else if (total > 20) {
+            edges.update({ id: link[0].id, width: 4, color: { color: "#80FF00" } })
+          } else if (total > 0) {
+            edges.update({ id: link[0].id, width: 3, color: { color: "#007FFF" } })
+          }
         }
       }
     }
@@ -289,37 +297,4 @@ $(function () {
     }
   });
 
-  // Web Socket error handling
-
-  socket.on('connect_error', (error) => {
-    console.log("Connect Error: " + error)
-  });
-
-  socket.on('connect_timeout', (timeout) => {
-    console.log("Connecting timeout: " + timeout)
-  });
-
-  socket.on('error', (error) => {
-    console.log("Error: " + error)
-  });
-
-  socket.on('disconnect', (reason) => {
-    if (reason === 'io server disconnect') {
-      console.log("Server Disconnected")
-      socket.connect();
-    }
-    console.log("Disconnected")
-  });
-
-  socket.on('reconnect', (attemptNumber) => {
-    console.log("Reconnecting ...")
-  });
-
-  socket.on('reconnect_error', (error) => {
-    console.log("Reconnect Error: " + error)
-  });
-
-  socket.on('reconnect_failed', () => {
-    console.log("Gagal Reconnect")
-  });
 });

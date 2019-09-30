@@ -28,20 +28,22 @@ $(function () {
 
   //ambil data metrik dari influx
   socket.on("init", function (data) {
-    setTimeout(() => {
-      let int = get_int()
-      for (i in int) {
-        let z = int[i].id
-        let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
-        if (metric.length != 0) {
-          val[z] = []
-          metric.forEach(d => {
-            val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
-          })
+    if (data) {
+      setTimeout(() => {
+        let int = get_int()
+        for (i in int) {
+          let z = int[i].id
+          let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
+          if (metric.length != 0) {
+            val[z] = []
+            metric.forEach(d => {
+              val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
+            })
+          }
+          g[z].updateOptions({ 'file': val[z] });
         }
-        g[z].updateOptions({ 'file': val[z] });
-      }
-    }, 1000)
+      }, 1000)
+    }
   })
 
   function grafik() {
@@ -89,98 +91,71 @@ $(function () {
 
   //ambil daftar interfaces dari link antar switch
   socket.on("links", function (data) {
-    let cmp = len;
-    //simpan ke daftar interfaces
-    for (i in data) {
-      if (!interfaces.some(a => ((a.dpid == data[i].from) && (a.port == data[i].from_port)))) {
-        interfaces.push({
-          id: len,
-          dpid: data[i].from,
-          port: data[i].from_port
-        })
-        len++;
+    if (data) {
+      let cmp = len;
+      //simpan ke daftar interfaces
+      for (i in data) {
+        if (!interfaces.some(a => ((a.dpid == data[i].from) && (a.port == data[i].from_port)))) {
+          interfaces.push({
+            id: len,
+            dpid: data[i].from,
+            port: data[i].from_port
+          })
+          len++;
+        }
+        if (!interfaces.some(a => ((a.dpid == data[i].to) && (a.port == data[i].to_port)))) {
+          interfaces.push({
+            id: len,
+            dpid: data[i].to,
+            port: data[i].to_port
+          })
+          len++;
+        }
       }
-      if (!interfaces.some(a => ((a.dpid == data[i].to) && (a.port == data[i].to_port)))) {
-        interfaces.push({
-          id: len,
-          dpid: data[i].to,
-          port: data[i].to_port
-        })
-        len++;
+      //jika jumlah interfaces berbeda maka buat ulang daftar interfaces
+      if (len != cmp) {
+        grafik();
       }
-    }
-    //jika jumlah interfaces berbeda maka buat ulang daftar interfaces
-    if (len != cmp) {
-      grafik();
     }
   })
 
   //ambil daftar interfaces dari link switch ke host
   socket.on("hosts", function (data) {
-    let cmp = len;
-    for (i in data) {
-      if (!interfaces.some(a => ((a.dpid == data[i].to) && (a.port == data[i].to_port)))) {
-        interfaces.push({
-          id: len,
-          dpid: data[i].to,
-          port: data[i].to_port
-        })
-        len++;
+    if (data) {
+      let cmp = len;
+      for (i in data) {
+        if (!interfaces.some(a => ((a.dpid == data[i].to) && (a.port == data[i].to_port)))) {
+          interfaces.push({
+            id: len,
+            dpid: data[i].to,
+            port: data[i].to_port
+          })
+          len++;
+        }
       }
-    }
-    if (len != cmp) {
-      grafik();
+      if (len != cmp) {
+        grafik();
+      }
     }
   })
 
   //ambil data metrik dari sflow
   socket.on("metrics", function (data) {
-    let int = get_int()
-    if (data.length > 0) {
-      for (i in int) {
-        let z = int[i].id
-        let metric = data.filter(a => (("of:" + a.of_dpid) == int[i].dpid) && (a.of_port == int[i].port))
-        if (metric.length > 0) {
-          metric.forEach(d => {
-            val[z].push([new Date(), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
-          })
-          g[z].updateOptions({ 'file': val[z] });
+    if (data) {
+      let int = get_int()
+      if (data.length > 0) {
+        for (i in int) {
+          let z = int[i].id
+          let metric = data.filter(a => (("of:" + a.of_dpid) == int[i].dpid) && (a.of_port == int[i].port))
+          if (metric.length > 0) {
+            metric.forEach(d => {
+              val[z].push([new Date(), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
+            })
+            g[z].updateOptions({ 'file': val[z] });
+          }
         }
       }
     }
   })
 
-  // Web Socket error handling
-
-  socket.on('connect_error', (error) => {
-    console.log("Connect Error: " + error)
-  });
-
-  socket.on('connect_timeout', (timeout) => {
-    console.log("Connecting timeout: " + timeout)
-  });
-
-  socket.on('error', (error) => {
-    console.log("Error: " + error)
-  });
-
-  socket.on('disconnect', (reason) => {
-    if (reason === 'io server disconnect') {
-      console.log("Server Disconnected")
-      socket.connect();
-    }
-    console.log("Disconnected")
-  });
-
-  socket.on('reconnect', (attemptNumber) => {
-    console.log("Reconnecting ...")
-  });
-
-  socket.on('reconnect_error', (error) => {
-    console.log("Reconnect Error: " + error)
-  });
-
-  socket.on('reconnect_failed', () => {
-    console.log("Gagal Reconnect")
-  });
 });

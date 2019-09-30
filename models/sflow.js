@@ -15,6 +15,7 @@ async function restcon(api, method = "GET") {
 //get_metrics : Output ke Web Socket dengan nama "metrics" berisi
 //[
 // { 
+//     ip: ,
 //     of_dpid: ,
 //     of_port: ,
 //     ifinutilization: ,
@@ -44,7 +45,7 @@ function get_metrics() {
             }
         }
         return metrics;
-    });
+    }).catch(err => console.error(new Date() + "[sFlow] Gagal mengambil data metrik"))
 }
 
 module.exports = {

@@ -32,7 +32,7 @@ function get_devices() {
             })
         }
         return devices;
-    });
+    }).catch(err => console.error(new Date() + "[ONOS] Gagal mengambil data perangkat"))
 }
 
 function get_links() {
@@ -50,7 +50,7 @@ function get_links() {
             }
         }
         return links;
-    });
+    }).catch(err => console.error(new Date() + "[ONOS] Gagal mengambil data links"))
 }
 
 function get_hosts() {
@@ -65,7 +65,7 @@ function get_hosts() {
             })
         }
         return hosts;
-    });
+    }).catch(err => console.error(new Date() + "[ONOS] Gagal mengambil data host"))
 }
 
 module.exports = {
