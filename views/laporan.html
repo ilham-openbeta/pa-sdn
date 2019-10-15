@@ -9,9 +9,11 @@
         Sistem Pemantauan
     </title>
     <link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/lib/dygraph.css">
     <script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/js/lib/dygraph.min.js"></script>
     <script type="text/javascript" src="/js/laporan-app.js"></script>
 </head>
 
@@ -39,17 +41,26 @@
     </nav>
 
     <style>
-        table,
         th,
         td {
-            padding: 7px;
+            padding: 4px;
             border: 1px solid black;
             border-collapse: collapse;
+        }
+
+        .grafik {
+            margin: auto;
+            display: block;
+            width: 800px;
+            height: 200px;
         }
 
         @media print {
             .no-print {
                 display: none !important;
+            }
+            .daftar-sw {
+                page-break-before: always;
             }
         }
     </style>
@@ -62,6 +73,7 @@
             <br> Jumlah Switch Terhubung : <span id="1"> 0 </span>
             <br> Jumlah Host Terhubung : <span id="2"> 0 </span>
             <br> Jumlah Link : <span id="3"> 0 </span>
+            <div class="daftar-link"></div> 
             <div class="no-print">
                 <br>Tampilkan Laporan :
                 <br> <input type="radio" name="periode" id="periode" value="a" checked="checked">

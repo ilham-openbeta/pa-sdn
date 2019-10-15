@@ -1,6 +1,8 @@
 var database = [];
 var devices = [];
 var socket = io();
+var g = [];
+var val = [];
 
 Date.prototype.toDateInputValue = (function () {
     var local = new Date(this);
@@ -60,62 +62,91 @@ function buat_tabel() {
         //filter tanggal yang sesuai
         let filter_tgl = database.filter(a => (new Date(a.time) >= from) && (new Date(a.time) <= to))
         if (filter_tgl.length != 0) {
-            html += '<br>Tabel Statistik Throughput dari ' + format_tgl(from) + ' hingga ' + format_tgl(to) + '<br>'
+            let c = 0;
+            html =
+                '<br>Laporan statistik throughput dari ' + format_tgl(from) + ' hingga ' + format_tgl(to) +
+                '<br>Keterangan : tidak menampilkan perangkat dan port yang tidak memiliki data' +
+                '<br>'
+            baris.append(html)
             for (i in devices) {
                 //filter salah satu data perangkat
                 let filter_dev = filter_tgl.filter(a => (("of:" + a.dpid) == devices[i].id))
                 if (filter_dev.length != 0) {
-                    html +=
+                    html =
                         '<br> DPID : of:' + filter_dev[0].dpid +
                         '<br> IP Address : ' + filter_dev[0].ip +
-                        '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps' +
-                        '<table>' +
-                        '<tr>' +
-                        '    <th rowspan="2">Port</th>' +
-                        '    <th colspan="3">Throughput (KB/s) / Utilization (%)</th>' +
-                        '    <th rowspan="2">Total Bytes</th>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '    <th>Max</th>' +
-                        '    <th>Min</th>' +
-                        '    <th>Avg</th>' +
-                        '</tr>'
+                        '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps'
+                    baris.append(html)
                     //list port yang ada di database
                     let list_port = [...new Set(filter_dev.map(a => a.port))]
                     for (j in list_port) {
                         let filter_port = filter_dev.filter(a => a.port == list_port[j])
-                        let max = Math.max(...filter_port.map(a => a.ifinoctets + a.ifoutoctets))
-                        let min = Math.min(...filter_port.map(a => a.ifinoctets + a.ifoutoctets))
-                        let sum = filter_port.reduce((total, val) => {
-                            let tr = val.ifinoctets + val.ifoutoctets
-                            return total + tr
+                        //IN - THROUGHPUT
+                        let max_in = Math.max(...filter_port.map(a => a.ifinoctets))
+                        let sum_in = filter_port.reduce((total, val) => {
+                            return total + val.ifinoctets
                         }, 0)
-                        let avg = sum / filter_port.length
+                        let avg_in = sum_in / filter_port.length
+                        //IN - UTILIZATION
+                        let max_util_in = Math.max(...filter_port.map(a => a.ifinutilization))
+                        let sum_util_in = filter_port.reduce((total, val) => {
+                            return total + val.ifinutilization
+                        }, 0)
+                        let avg_util_in = sum_util_in / filter_port.length
 
-                        let max_util = Math.max(...filter_port.map(a => a.ifinutilization + a.ifoututilization))
-                        let min_util = Math.min(...filter_port.map(a => a.ifinutilization + a.ifoututilization))
-                        let sum_util = filter_port.reduce((total, val) => {
-                            let tr = val.ifinutilization + val.ifoututilization
-                            return total + tr
+                        //OUT - THROUGHPUT
+                        let max_out = Math.max(...filter_port.map(a => a.ifoutoctets))
+                        let sum_out = filter_port.reduce((total, val) => {
+                            return total + val.ifoutoctets
                         }, 0)
-                        let avg_util = sum_util / filter_port.length
-                        html +=
+                        let avg_out = sum_out / filter_port.length
+                        //OUT - UTILIZATION
+                        let max_util_out = Math.max(...filter_port.map(a => a.ifoututilization))
+                        let sum_util_out = filter_port.reduce((total, val) => {
+                            return total + val.ifoututilization
+                        }, 0)
+                        let avg_util_out = sum_util_out / filter_port.length
+
+                        html =
+                            '<div class="grafik"></div>' +
+                            '<table style="margin: 20px 130px">' +
                             '<tr>' +
-                            '    <td>' + filter_port[j].port + '</td>' +
-                            '    <td>' + Math.round(max / 1000) + ' (' + Math.round(max_util) + '%)</td>' +
-                            '    <td>' + Math.round(min / 1000) + ' (' + Math.round(min_util) + '%)</td>' +
-                            '    <td>' + Math.round(avg / 1000) + ' (' + Math.round(avg_util) + '%)</td>' +
-                            '    <td>' + Math.round(sum / 1000000) + ' MB</td>' +
-                            '</tr>'
+                            '<td><span style="color:#00ff00">Inbound</span></td>' +
+                            '<td>Max: ' + Math.round(max_in / 1000) + ' KB/s</td>' +
+                            '<td>Avg: ' + Math.round(avg_in / 1000) + ' KB/s</td>' +
+                            '<td>Total Bytes: ' + Math.round(sum_in / 1000000) + ' MB</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                            '<td><span style="color:#0000ff">Outbound</span></td>' +
+                            '<td>Max: ' + Math.round(max_out / 1000) + ' KB/s</td>' +
+                            '<td>Avg: ' + Math.round(avg_out / 1000) + ' KB/s</td>' +
+                            '<td>Total Bytes: ' + Math.round(sum_out / 1000000) + ' MB</td>' +
+                            '</tr>' +
+                            '</table>'
+                        baris.append(html)
+
+                        //buat grafik
+                        val[c] = []
+                        for (q in filter_port) {
+                            val[c].push([new Date(filter_port[q].time), Math.round(filter_port[q].ifinoctets / 1000), Math.round(filter_port[q].ifoutoctets / 1000)])
+                        }
+                        let container = $(".grafik")[c];
+                        g[c] = new Dygraph(container, val[c], {
+                            title: "of:" + filter_dev[0].dpid + " port " + list_port[j],
+                            drawPoints: true,
+                            labels: ['Tanggal', 'IN', 'OUT'],
+                            ylabel: "Throughput (KB/s)",
+                            xlabel: "Waktu",
+                            strokeWidth: 2,
+                            colors: ["#00ff00", "#0000ff"]
+                        });
+                        c++;
                     }
-                    html += '</table>'
                 } else {
                     console.log("Data perangkat " + devices[i].id + " kosong")
                 }
             }
-            html +=
-                '<br>' +
-                'Keterangan : Tidak menampilkan perangkat dan port yang tidak ada datanya' +
+            html =
                 '<div class="no-print">' +
                 '<button type="button" class="btn btn-primary" onclick="window.print()">Cetak Laporan</button>' +
                 '</div>'
@@ -146,7 +177,35 @@ $(function () {
 
     socket.on("links", function (data) {
         if (data) {
+            let html = ""
             $("span#3").text(data.length)
+            html =
+                '<br>Tabel Link' +
+                '<br>' +
+                '<table>' +
+                '<tr>' +
+                '    <th colspan="2">Dari</th>' +
+                '    <th rowspan="2"></th>' +
+                '    <th colspan="2">Ke</th>' +
+                '</tr>' +
+                '<tr>' +
+                '    <th>DPID</th>' +
+                '    <th>Port</th>' +
+                '    <th>DPID</th>' +
+                '    <th>Port</th>' +
+                '</tr>'
+            for (d in data) {
+                html +=
+                    '<tr>' +
+                    '    <td>' + data[d].from + '</td>' +
+                    '    <td>' + data[d].from_port + '</td>' +
+                    '    <td>&lt;&gt;</td>' +
+                    '    <td>' + data[d].to + '</td>' +
+                    '    <td>' + data[d].to_port + '</td>' +
+                    '</tr>'
+            }
+            html += '</table>'
+            $(".daftar-link").html(html)
         }
     })
 
