@@ -7,8 +7,19 @@ Fitur :
 - Membuat laporan throughput setiap perangkat sesuai periode yang ditentukan
 - Data throughput tersimpan dalam database
 
-Screenshot
-[![teks gambar](url)](url)
+## Screenshot
+### Menu Topologi
+[![topologi](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/topo%20app.png)](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/topo%20app.png)
+
+### Menu Grafik :
+[![grafik](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/grafik%20app.png)](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/grafik%20app.png)
+
+### Menu Laporan :
+[![laporan 1](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/lapor%201.png)](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/lapor%201.png)
+
+[![laporan 2](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/lapor%202.png)](https://github.com/ilham-openbeta/pa-sdn/raw/master/screenshot/lapor%202.png)
+
+## Cara Install :
 
 Syarat kebutuhan aplikasi :
 - ONOS
@@ -16,7 +27,6 @@ Syarat kebutuhan aplikasi :
 - Node.js
 - InfluxDB
 
-## Cara Install :
 ### Install Node.js
 Lihat [Install Node.js](https://github.com/nodesource/distributions/blob/master/README.md).
 
@@ -32,7 +42,7 @@ $ npm install
 ```
 
 ### Konfigurasi Aplikasi
-Konfigurasi aplikasi atur pada file `/config/config.js` yang berisi terkait pengaturan akses ke ONOS, sFlow-RT, dan InfluxDB. Untuk pengaturan port yang digunakan oleh aplikasi web ini terdapat pada `index.js`.
+Konfigurasi aplikasi terletak pada file `/config/config.js` yang berisi pengaturan terkait akses ke ONOS, sFlow-RT, dan InfluxDB. Untuk pengaturan port yang digunakan oleh aplikasi web dapat diatur pada file `index.js`.
 
 ### Jalankan aplikasi
 Jalankan aplikasi dengan perintah berikut.
