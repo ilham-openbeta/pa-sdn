@@ -37,10 +37,19 @@ var arrows = false;
 //ubah util ke true untuk menggunakan data utilisasi, 
 //false untuk menggunakan data througput (kbps) sebagai penentu warna link
 //atur batas max KB/s jika util=false 
-var util = true;
-var max_kbps = 50000;
+var util = false;
+var max_kbps = 10000;
+
+function sekarang() {
+  let today = new Date();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  return time
+}
 
 $(function () {
+  //pengaturan notifikasi
+  $.notify.defaults({ position: "right bottom", autoHideDelay: 20000 });
+  
   //ambil daftar perangkat switch
   socket.on("nodes", function (data) {
     if (data) {
@@ -51,6 +60,11 @@ $(function () {
       });
       //jika jumlahnya berbeda maka buat ulang daftar perangkat
       if (data.length != group.length) {
+        if(data.length > group.length){
+          $.notify(sekarang() + " Switch bertambah", "info")
+        } else {
+          $.notify(sekarang() + " Switch berkurang", "info")
+        }
         nodes.remove(group);
         network.setOptions({ physics: true });
         for (i in data) {
@@ -77,6 +91,11 @@ $(function () {
       });
       //jika jumlahnya berbeda maka buat ulang daftar link
       if (data.length != group.length) {
+        if(data.length > group.length){
+          $.notify(sekarang() + " Ada Link terhubung", "info")
+        } else {
+          $.notify(sekarang() + " Ada Link terputus", "info")
+        }
         edges.remove(group);
         let arr = ""
         if (arrows) {
@@ -106,6 +125,11 @@ $(function () {
       });
       //jika jumlah perangkat host berbeda maka buat ulang daftar host
       if (data.length != group.length) {
+        if(data.length > group.length){
+          $.notify(sekarang() + " Host bertambah", "info")
+        } else {
+          $.notify(sekarang() + " Host berkurang", "info")
+        }
         nodes.remove(group);
         network.setOptions({ physics: true });
         for (i in data) {
@@ -126,6 +150,11 @@ $(function () {
       });
       //jika jumlah link antar host berbeda maka buat ulang daftar link
       if (data.length != group.length) {
+        if(data.length > group.length){
+          $.notify(sekarang() + " Ada Link terhubung", "info")
+        } else {
+          $.notify(sekarang() + " Ada Link terputus", "info")
+        }
         edges.remove(group);
         let arr = ""
         if (arrows) {
@@ -156,6 +185,7 @@ $(function () {
         }
       }
       for (i in data) {
+        //cari link mana yang berubah
         let link = edges.get({
           filter: function (item) {
             if (item.group == "link-switch") {
@@ -295,6 +325,42 @@ $(function () {
     if (params.iterations > 10) {
       network.setOptions({ physics: false });
     }
+  });
+
+  // Web Socket Error Handling
+
+  socket.on('connect_error', (error) => {
+    console.log("Connect Error: " + error)
+  });
+
+  socket.on('connect_timeout', (timeout) => {
+    console.log("Connecting timeout: " + timeout)
+  });
+
+  socket.on('error', (error) => {
+    console.log("Error: " + error)
+  });
+
+  socket.on('disconnect', (reason) => {
+    if (reason === 'io server disconnect') {
+      console.log("Server Disconnected")
+      socket.connect();
+    }
+    console.log(sekarang() + " Disconnected" + reason)
+    $.notify(sekarang() + " Web Server terputus", "error")
+  });
+
+  socket.on('reconnect', (attemptNumber) => {
+    console.log(sekarang() + " Reconnected " + attemptNumber)
+    $.notify(sekarang() + " Web Server terhubung", "success")
+  });
+
+  socket.on('reconnect_error', (error) => {
+    console.log("Reconnect Error: " + error)
+  });
+
+  socket.on('reconnect_failed', () => {
+    console.log("Gagal Reconnect")
   });
 
 });

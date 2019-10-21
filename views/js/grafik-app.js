@@ -158,4 +158,40 @@ $(function () {
     }
   })
 
+  // Web Socket Error Handling
+
+  socket.on('connect_error', (error) => {
+    console.log("Connect Error: " + error)
+  });
+
+  socket.on('connect_timeout', (timeout) => {
+    console.log("Connecting timeout: " + timeout)
+  });
+
+  socket.on('error', (error) => {
+    console.log("Error: " + error)
+  });
+
+  socket.on('disconnect', (reason) => {
+    if (reason === 'io server disconnect') {
+      console.log("Server Disconnected")
+      socket.connect();
+    }
+    console.log(sekarang() + " Disconnected" + reason)
+    $.notify(sekarang() + " Web Server terputus", "error")
+  });
+
+  socket.on('reconnect', (attemptNumber) => {
+    console.log(sekarang() + " Reconnected " + attemptNumber)
+    $.notify(sekarang() + " Web Server terhubung", "success")
+  });
+
+  socket.on('reconnect_error', (error) => {
+    console.log("Reconnect Error: " + error)
+  });
+
+  socket.on('reconnect_failed', () => {
+    console.log("Gagal Reconnect")
+  });
+
 });
