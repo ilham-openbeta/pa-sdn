@@ -44,6 +44,7 @@ function buat_tabel() {
             let per = $('select#per').val()
             if (per == "1") {
                 from = new Date()
+                from.setHours(from.getHours() - 24)
                 to = new Date()
             } else if (per == "2") {
                 from = new Date()
