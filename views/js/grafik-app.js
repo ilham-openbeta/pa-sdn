@@ -12,6 +12,12 @@ function set_dpid(params) {
   window.location.assign(url)
 }
 
+function sekarang() {
+  let today = new Date();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  return time
+}
+
 $(function () {
   //filter data berdasar perangkat, hasil list interfaces
   function get_int() {

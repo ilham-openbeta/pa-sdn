@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Traffic Generator
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.min.css">
+    <script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/js/test-app.js"></script>
+</head>
+
+<body>
+
+    <style>
+        .row {
+            margin: 10px 0px
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">ProyekAkhir</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Topologi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/grafik">Grafik</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/laporan">Laporan</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <br>Traffic Generator :
+        <div class="row">
+            <div class="col-md-3">
+                Pilih perangkat asal
+            </div>
+            <div class="col-md-3">
+                <select id="asal">
+                    <option value="0">PC-1</option>
+                    <option value="1">PC-2</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Pilih perangkat tujuan
+            </div>
+            <div class="col-md-3">
+                <select id="tujuan">
+                    <option value="0">PC-3</option>
+                    <option value="1">PC-4</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                Masukkan nilai throughput
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="throughput" id="throughput" style="width:100px"> KB/s
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="buat_traffic()">Buat Traffic</button>
+        <br>
+        <br>Pengaturan saat ini :
+        <br>
+        <div id="info"></div>
+    </div>
+
+</body>
+
+</html>

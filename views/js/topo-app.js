@@ -49,7 +49,7 @@ function sekarang() {
 $(function () {
   //pengaturan notifikasi
   $.notify.defaults({ position: "right bottom", autoHideDelay: 20000 });
-  
+
   //ambil daftar perangkat switch
   socket.on("nodes", function (data) {
     if (data) {
@@ -60,7 +60,7 @@ $(function () {
       });
       //jika jumlahnya berbeda maka buat ulang daftar perangkat
       if (data.length != group.length) {
-        if(data.length > group.length){
+        if (data.length > group.length) {
           $.notify(sekarang() + " Switch bertambah", "info")
         } else {
           $.notify(sekarang() + " Switch berkurang", "info")
@@ -91,7 +91,7 @@ $(function () {
       });
       //jika jumlahnya berbeda maka buat ulang daftar link
       if (data.length != group.length) {
-        if(data.length > group.length){
+        if (data.length > group.length) {
           $.notify(sekarang() + " Ada Link terhubung", "info")
         } else {
           $.notify(sekarang() + " Ada Link terputus", "info")
@@ -125,7 +125,7 @@ $(function () {
       });
       //jika jumlah perangkat host berbeda maka buat ulang daftar host
       if (data.length != group.length) {
-        if(data.length > group.length){
+        if (data.length > group.length) {
           $.notify(sekarang() + " Host bertambah", "info")
         } else {
           $.notify(sekarang() + " Host berkurang", "info")
@@ -150,7 +150,7 @@ $(function () {
       });
       //jika jumlah link antar host berbeda maka buat ulang daftar link
       if (data.length != group.length) {
-        if(data.length > group.length){
+        if (data.length > group.length) {
           $.notify(sekarang() + " Ada Link terhubung", "info")
         } else {
           $.notify(sekarang() + " Ada Link terputus", "info")

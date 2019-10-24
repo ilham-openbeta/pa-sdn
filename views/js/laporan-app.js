@@ -17,12 +17,15 @@ function format_tgl(date) {
         "Agustus", "September", "Oktober",
         "November", "Desember"
     ];
-
     var day = date.getDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
-
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+
+function format_waktu(tgl) {
+    let time = tgl.getHours() + ":" + tgl.getMinutes() + ":" + tgl.getSeconds();
+    return time
 }
 
 // try & generate view
@@ -69,14 +72,23 @@ function buat_tabel() {
                 '<br>Keterangan : tidak menampilkan perangkat dan port yang tidak memiliki data' +
                 '<br>'
             baris.append(html)
+            
+            //buat devices dari database jika websocket onos mati
+            if(devices.length == 0){
+                let list_dev = [...new Set(filter_tgl.map(a => a.dpid))]
+                for(dd of list_dev){
+                    devices.push({id: "of:" + dd})
+                }
+            } 
+
             for (i in devices) {
                 //filter salah satu data perangkat
                 let filter_dev = filter_tgl.filter(a => (("of:" + a.dpid) == devices[i].id))
                 if (filter_dev.length != 0) {
                     html =
-                        '<br> DPID : of:' + filter_dev[0].dpid +
-                        '<br> IP Address : ' + filter_dev[0].ip +
-                        '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps'
+                        '<hr><br> <b>Perangkat : of:' + filter_dev[0].dpid +
+                        '<br> IP Address : ' + filter_dev[0].ip + '</b>'
+                        // '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps'
                     baris.append(html)
                     //list port yang ada di database
                     let list_port = [...new Set(filter_dev.map(a => a.port))]
@@ -108,18 +120,28 @@ function buat_tabel() {
                         }, 0)
                         let avg_util_out = sum_util_out / filter_port.length
 
+                        //cari tanggal max
+                        let max_in_data = filter_port.find(a => a.ifinoctets == max_in)
+                        let max_out_data = filter_port.find(a => a.ifoutoctets == max_out)
+                        let max_in_time = new Date(max_in_data.time)
+                        let max_out_time = new Date(max_out_data.time)
+
                         html =
                             '<div class="grafik"></div>' +
-                            '<table style="margin: 20px 130px">' +
+                            '<table style="margin: 20px 80px">' +
                             '<tr>' +
                             '<td><span style="color:#00ff00">Inbound</span></td>' +
-                            '<td>Max: ' + Math.round(max_in / 1000) + ' KB/s</td>' +
-                            '<td>Avg: ' + Math.round(avg_in / 1000) + ' KB/s</td>' +
-                            '<td>Total Bytes: ' + Math.round(sum_in / 1000000) + ' MB</td>' +
+                            '<td style="width: 360px">Max: ' + Math.round(max_in / 1000) + ' KB/s' +
+                            ' (' + format_tgl(max_in_time) + " " +
+                            format_waktu(max_in_time) + ')</td>' +
+                            '<td style="width: 160px">Avg: ' + Math.round(avg_in / 1000) + ' KB/s</td>' +
+                            '<td style="width: 200px">Total Bytes: ' + Math.round(sum_in / 1000000) + ' MB</td>' +
                             '</tr>' +
                             '<tr>' +
                             '<td><span style="color:#0000ff">Outbound</span></td>' +
-                            '<td>Max: ' + Math.round(max_out / 1000) + ' KB/s</td>' +
+                            '<td>Max: ' + Math.round(max_out / 1000) + ' KB/s' +
+                            ' (' + format_tgl(max_out_time) + " " +
+                            format_waktu(max_out_time) + ')</td>' +
                             '<td>Avg: ' + Math.round(avg_out / 1000) + ' KB/s</td>' +
                             '<td>Total Bytes: ' + Math.round(sum_out / 1000000) + ' MB</td>' +
                             '</tr>' +
@@ -215,40 +237,4 @@ $(function () {
             $("span#2").text(data.length)
         }
     })
-
-    // Web Socket Error Handling
-
-    socket.on('connect_error', (error) => {
-        console.log("Connect Error: " + error)
-    });
-
-    socket.on('connect_timeout', (timeout) => {
-        console.log("Connecting timeout: " + timeout)
-    });
-
-    socket.on('error', (error) => {
-        console.log("Error: " + error)
-    });
-
-    socket.on('disconnect', (reason) => {
-        if (reason === 'io server disconnect') {
-            console.log("Server Disconnected")
-            socket.connect();
-        }
-        console.log(sekarang() + " Disconnected" + reason)
-        $.notify(sekarang() + " Web Server terputus", "error")
-    });
-
-    socket.on('reconnect', (attemptNumber) => {
-        console.log(sekarang() + " Reconnected " + attemptNumber)
-        $.notify(sekarang() + " Web Server terhubung", "success")
-    });
-
-    socket.on('reconnect_error', (error) => {
-        console.log("Reconnect Error: " + error)
-    });
-
-    socket.on('reconnect_failed', () => {
-        console.log("Gagal Reconnect")
-    });
 })
