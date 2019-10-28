@@ -16,6 +16,7 @@ app.get("/topologi", (req, res) => res.sendFile(__dirname + "/views/topologi.htm
 app.get("/grafik", (req, res) => res.sendFile(__dirname + "/views/grafik.html"));
 app.get("/grafik/*", (req, res) => res.sendFile(__dirname + "/views/grafik.html"));
 app.get("/laporan", (req, res) => res.sendFile(__dirname + "/views/laporan.html"));
+app.get("/panduan", (req, res) => res.sendFile(__dirname + "/views/panduan.html"));
 app.get("/test", (req, res) => res.sendFile(__dirname + "/views/test.html"));
 app.get("*", (req, res) => res.sendFile(__dirname + "/views/topologi.html"));
 

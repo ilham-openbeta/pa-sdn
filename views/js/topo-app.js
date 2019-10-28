@@ -302,7 +302,7 @@ $(function () {
           "<br>IP Address : " + node.detail.ip +
           "<br>Hardware : " + node.detail.hardware +
           "<br>Protocol : " + node.detail.protocol +
-          "<br><a href='/grafik?dpid=" + params.nodes[0] + "' style='color:red'>Lihat Grafik >></a>" +
+          "<br><a href='/grafik?dpid=" + params.nodes[0] + "' style='color:red' target='_blank'>Lihat Grafik >></a>" +
           "</div>"
       } else if (node.group == "host") {
         html =
