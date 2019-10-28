@@ -50,7 +50,7 @@ function insert_metrics(data) {
             ifoutoctets: data[i].ifoutoctets
           },
         }
-      ])
+      ]).catch(err => console.error(new Date() + "[InfluxDB] Gagal entry data ke database"))
     }
   }).catch(err => console.error(new Date() + "[InfluxDB] Gagal memasukkan data ke database"))
 }

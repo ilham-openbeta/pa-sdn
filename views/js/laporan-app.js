@@ -33,7 +33,7 @@ function buat_tabel() {
     let baris = $('.daftar-sw')
     baris.empty()
     if (database.length == 0) {
-        console.log("Database kosong")
+        alert("Database tidak terhubung atau kosong. \nSilahkan cek Web Server!")
     } else {
         let from;
         let to;
