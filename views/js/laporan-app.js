@@ -3,6 +3,7 @@ var devices = [];
 var socket = io();
 var g = [];
 var val = [];
+var nodes = [];
 
 Date.prototype.toDateInputValue = (function () {
     var local = new Date(this);
@@ -72,23 +73,29 @@ function buat_tabel() {
                 '<br>Keterangan : tidak menampilkan perangkat dan port yang tidak memiliki data' +
                 '<br>'
             baris.append(html)
-            
+
             //buat devices dari database jika websocket onos mati
-            if(devices.length == 0){
+            if (devices.length == 0) {
                 let list_dev = [...new Set(filter_tgl.map(a => a.dpid))]
-                for(dd of list_dev){
-                    devices.push({id: "of:" + dd})
+                for (dd of list_dev) {
+                    devices.push({ id: "of:" + dd })
                 }
-            } 
+            }
 
             for (i in devices) {
                 //filter salah satu data perangkat
                 let filter_dev = filter_tgl.filter(a => (("of:" + a.dpid) == devices[i].id))
                 if (filter_dev.length != 0) {
+                    let label = filter_dev[0].dpid
+                    if (nodes.length > 0) {
+                        let f = nodes.find(a => a.id == ("of:" + filter_dev[0].dpid))
+                        label = f.label
+                    }
                     html =
-                        '<hr><br> <b>Perangkat : of:' + filter_dev[0].dpid +
+                        '<hr><br> <b>Nama Perangkat : ' + label +
+                        '<br> DPID : of:' + filter_dev[0].dpid +
                         '<br> IP Address : ' + filter_dev[0].ip + '</b>'
-                        // '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps'
+                    // '<br> Link Speed : ' + filter_dev[0].ifspeed / 1000000 + ' Mbps'
                     baris.append(html)
                     //list port yang ada di database
                     let list_port = [...new Set(filter_dev.map(a => a.port))]
@@ -155,13 +162,14 @@ function buat_tabel() {
                         }
                         let container = $(".grafik")[c];
                         g[c] = new Dygraph(container, val[c], {
-                            title: "of:" + filter_dev[0].dpid + " port " + list_port[j],
+                            title: label + " port " + list_port[j],
                             drawPoints: true,
                             labels: ['Tanggal', 'IN', 'OUT'],
                             ylabel: "Throughput (KB/s)",
                             xlabel: "Waktu",
                             strokeWidth: 2,
-                            colors: ["#00ff00", "#0000ff"]
+                            colors: ["#00ff00", "#0000ff"],
+                            dateWindow: [from, to]
                         });
                         c++;
                     }
@@ -212,18 +220,30 @@ $(function () {
                 '    <th colspan="2">Ke</th>' +
                 '</tr>' +
                 '<tr>' +
-                '    <th>DPID</th>' +
+                '    <th>Nama Perangkat</th>' +
                 '    <th>Port</th>' +
-                '    <th>DPID</th>' +
+                '    <th>Nama Perangkat</th>' +
                 '    <th>Port</th>' +
                 '</tr>'
             for (d in data) {
+                let labelfrom = data[d].from;
+                let labelto = data[d].to;
+                if (nodes.length > 0) {
+                    let f = nodes.find(a => a.id == data[d].from)
+                    let t = nodes.find(a => a.id == data[d].to)
+                    if (f.label !== undefined) {
+                        labelfrom = f.label
+                    }
+                    if (t.label !== undefined) {
+                        labelto = t.label
+                    }
+                }
                 html +=
                     '<tr>' +
-                    '    <td>' + data[d].from + '</td>' +
+                    '    <td>' + labelfrom + '</td>' +
                     '    <td>' + data[d].from_port + '</td>' +
                     '    <td>&lt;&gt;</td>' +
-                    '    <td>' + data[d].to + '</td>' +
+                    '    <td>' + labelto + '</td>' +
                     '    <td>' + data[d].to_port + '</td>' +
                     '</tr>'
             }
@@ -235,6 +255,12 @@ $(function () {
     socket.on("hosts", function (data) {
         if (data) {
             $("span#2").text(data.length)
+        }
+    })
+
+    socket.on("load", function (data) {
+        if (data) {
+            nodes = data
         }
     })
 })

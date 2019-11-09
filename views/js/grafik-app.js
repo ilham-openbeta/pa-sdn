@@ -35,20 +35,18 @@ $(function () {
   //ambil data metrik dari influx
   socket.on("init", function (data) {
     if (data) {
-      setTimeout(() => {
-        let int = get_int()
-        for (i in int) {
-          let z = int[i].id
-          let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
-          if (metric.length != 0) {
-            val[z] = []
-            metric.forEach(d => {
-              val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
-            })
-          }
-          g[z].updateOptions({ 'file': val[z] });
+      let int = get_int()
+      for (i in int) {
+        let z = int[i].id
+        let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
+        if (metric.length != 0) {
+          val[z] = []
+          metric.forEach(d => {
+            val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
+          })
         }
-      }, 1000)
+        g[z].updateOptions({ 'file': val[z] });
+      }
     }
   })
 
@@ -164,6 +162,22 @@ $(function () {
     }
   })
 
+  socket.on("load", function (data) {
+    if (data) {
+      let int = get_int()
+      for (d of data) {
+        $('.perangkat option[value="' + d.id + '"]').html(d.label)
+        if (d.id == int[0].dpid) {
+          for (let l = 0; l < $(".dygraph-title").length; l++) {
+            let title = $(".dygraph-title").eq(l).text().split(" ")
+            let html = d.label + " port " + title[2]
+            $(".dygraph-title").eq(l).html(html)
+          }
+        }
+      }
+    }
+  })
+
   // Web Socket Error Handling
 
   socket.on('connect_error', (error) => {
@@ -183,12 +197,16 @@ $(function () {
       console.log("Server Disconnected")
       socket.connect();
     }
-    console.log(sekarang() + " Disconnected" + reason)
+    console.log(sekarang() + " Web Server terputus " + reason)
     $.notify(sekarang() + " Web Server terputus", "error")
+    let a = confirm("Hubungan dengan Web Server terputus. \nKlik OK untuk reload halaman ini.")
+    if (a) {
+      location.reload(true)
+    }
   });
 
   socket.on('reconnect', (attemptNumber) => {
-    console.log(sekarang() + " Reconnected " + attemptNumber)
+    console.log(sekarang() + " Web Server terhubung " + attemptNumber)
     $.notify(sekarang() + " Web Server terhubung", "success")
   });
 

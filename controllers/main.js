@@ -2,12 +2,14 @@ const influx = require("../models/influx")
 const onos = require("../models/onos")
 const sflow = require("../models/sflow")
 const cfg = require("../config/config")
+const fs = require("fs")
 var io;
+var nodes = [];
 
 // Untuk traffic generator
 const net = require('net');
 var daftar = [];
-//daftar alamat telnet client
+//daftar alamat telnet client dari GNS3
 var t = [
     // {
     //     host: "192.168.213.128",
@@ -70,11 +72,26 @@ function sflow_service() {
 
 module.exports = function (params) {
     io = params;
+    let rawdata = fs.readFileSync('./controllers/nodes.json');
+    nodes = JSON.parse(rawdata);
     io.on('connection', socket => {
-        onos.get_devices().then(res => { socket.emit("nodes", res) })
-        onos.get_links().then(res => { socket.emit("links", res) })
-        onos.get_hosts().then(res => { socket.emit("hosts", res) })
-        influx.get_metrics().then(res => { socket.emit("init", res) })
+        onos.get_devices().then(async(res) => {
+            socket.emit("nodes", res)
+            let a = await onos.get_links()
+            socket.emit("links", a)
+            let b = await onos.get_hosts()
+            socket.emit("hosts", b)
+            let c = await influx.get_metrics()
+            socket.emit("init", c)
+            socket.emit("load", nodes)
+        })
+
+        socket.on("simpan", data => {
+            nodes = data
+            let jison = JSON.stringify(nodes);
+            fs.writeFileSync('./controllers/nodes.json', jison);
+            io.sockets.emit("load", nodes);
+        })
 
         // Traffic generator
         socket.on("tg", data => {

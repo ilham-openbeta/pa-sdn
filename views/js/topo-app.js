@@ -14,16 +14,16 @@ var options = {
   },
   groups: {
     switch: {
-      image: "/img/sq_switch_blue.svg",
+      image: "/img/sq_switch_blue.png",
       shape: "image",
     },
     host: {
-      image: "/img/c_client_vm.svg",
+      image: "/img/c_client_vm.png",
       shape: "image",
     }
   },
-  layout: { randomSeed: 100 },
-  physics: { solver: "repulsion" }
+  physics: false
+  // physics: { solver: "repulsion" }
 };
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
@@ -46,6 +46,21 @@ function sekarang() {
   return time
 }
 
+function setlabel(id, lbl) {
+  let res = prompt("Masukkan Nama : ", lbl)
+  if (res != null) {
+    nodes.update({ id: id, label: res })
+    $(".labelo").html(res)
+    save()
+  }
+}
+
+function save() {
+  network.storePositions()
+  socket.emit("simpan", nodes.get())
+  alert("Data tersimpan")
+}
+
 $(function () {
   //pengaturan notifikasi
   $.notify.defaults({ position: "right bottom", autoHideDelay: 20000 });
@@ -53,6 +68,7 @@ $(function () {
   //ambil daftar perangkat switch
   socket.on("nodes", function (data) {
     if (data) {
+      network.storePositions()
       let group = nodes.get({
         filter: function (item) {
           return (item.group == "switch");
@@ -62,11 +78,13 @@ $(function () {
       if (data.length != group.length) {
         if (data.length > group.length) {
           $.notify(sekarang() + " Switch bertambah", "info")
+          console.log(sekarang() + " Switch bertambah")
         } else {
           $.notify(sekarang() + " Switch berkurang", "info")
+          console.log(sekarang() + " Switch berkurang")
         }
         nodes.remove(group);
-        network.setOptions({ physics: true });
+        // network.setOptions({ physics: true });
         for (i in data) {
           nodes.add(
             {
@@ -76,6 +94,15 @@ $(function () {
               detail: data[i]
             }
           );
+        }
+        //update posisi & label setelah dihapus
+        if (group.length > 0) {
+          for (d of group) {
+            if (nodes.get(d.id) != null) {
+              network.moveNode(d.id, d.x, d.y)
+              nodes.update({ id: d.id, label: d.label })
+            }
+          }
         }
       }
     }
@@ -93,8 +120,10 @@ $(function () {
       if (data.length != group.length) {
         if (data.length > group.length) {
           $.notify(sekarang() + " Ada Link terhubung", "info")
+          console.log(sekarang() + " Ada Link terhubung")
         } else {
           $.notify(sekarang() + " Ada Link terputus", "info")
+          console.log(sekarang() + " Ada Link terputus")
         }
         edges.remove(group);
         let arr = ""
@@ -118,6 +147,7 @@ $(function () {
   //ambil daftar host
   socket.on("hosts", function (data) {
     if (data) {
+      network.storePositions()
       let group = nodes.get({
         filter: function (item) {
           return (item.group == "host");
@@ -127,11 +157,13 @@ $(function () {
       if (data.length != group.length) {
         if (data.length > group.length) {
           $.notify(sekarang() + " Host bertambah", "info")
+          console.log(sekarang() + " Host bertambah")
         } else {
           $.notify(sekarang() + " Host berkurang", "info")
+          console.log(sekarang() + " Host berkurang")
         }
         nodes.remove(group);
-        network.setOptions({ physics: true });
+        // network.setOptions({ physics: true });
         for (i in data) {
           nodes.add(
             {
@@ -141,6 +173,15 @@ $(function () {
               detail: data[i]
             }
           );
+        }
+        //update posisi & label setelah dihapus
+        if (group.length > 0) {
+          for (d of group) {
+            if (nodes.get(d.id) != null) {
+              network.moveNode(d.id, d.x, d.y)
+              nodes.update({ id: d.id, label: d.label })
+            }
+          }
         }
       }
       group = edges.get({
@@ -152,8 +193,10 @@ $(function () {
       if (data.length != group.length) {
         if (data.length > group.length) {
           $.notify(sekarang() + " Ada Link terhubung", "info")
+          console.log(sekarang() + " Ada Link terhubung");
         } else {
           $.notify(sekarang() + " Ada Link terputus", "info")
+          console.log(sekarang() + " Ada Link terputus");
         }
         edges.remove(group);
         let arr = ""
@@ -232,6 +275,19 @@ $(function () {
     }
   })
 
+  socket.on("load", function (data) {
+    if (data.length > 0 && nodes.length > 0) {
+      for (d of data) {
+        if (nodes.get(d.id) != null) {
+          network.moveNode(d.id, d.x, d.y)
+          nodes.update({ id: d.id, label: d.label })
+        }
+      }
+      $.notify(sekarang() + " Koordinat & label diperbarui", "info")
+      console.log(sekarang() + " Koordinat & label diperbarui")
+    }
+  })
+
   let container = $(".vis-network")[0];
   let data = {
     nodes: nodes,
@@ -240,6 +296,7 @@ $(function () {
   network = new vis.Network(container, data, options);
   network.on("afterDrawing", function (params) {
     $('.kotak').remove();
+    $('.atombol').remove();
     let html =
       '<div class="kotak">' + "&nbsp;Keterangan :" +
       '<div class="kotak-warna" style="background-color: #FF0000;"></div>' +
@@ -252,7 +309,8 @@ $(function () {
       '<div class="kotak-teks">20 - 40 %</div>' +
       '<div class="kotak-warna" style="background-color: #007FFF;"></div>' +
       '<div class="kotak-teks">0 - 20 %</div>' +
-      '</div>'
+      '</div>' +
+      '<a href="#" onclick="save()" class="atombol"><div class="tombol">Simpan Bentuk Topologi</div></a>'
     $('.vis-network').append(html);
   })
   network.on("click", function (params) {
@@ -298,7 +356,9 @@ $(function () {
           "<div class='overlay'>" +
           "<b>INFO PERANGKAT</b> <br>" +
           "<hr style='margin:auto;margin-bottom:0.8em;border:1px solid black'>" +
-          "DPID : " + params.nodes[0] +
+          "Nama : <span class='labelo'>" + node.label + "</span>" +
+          "<br><a href='#' style='color:red' onclick='setlabel(\"" + params.nodes[0] + "\",\"" + node.label + "\")'>Ubah nama</a>" +
+          "<br><br>DPID : " + params.nodes[0] +
           "<br>IP Address : " + node.detail.ip +
           "<br>Hardware : " + node.detail.hardware +
           "<br>Protocol : " + node.detail.protocol +
@@ -309,7 +369,9 @@ $(function () {
           "<div class='overlay'>" +
           "<b>INFO PERANGKAT</b> <br>" +
           "<hr style='margin:auto;margin-bottom:0.8em;border:1px solid black'>" +
-          "IP Address : " + node.detail.ip +
+          "Nama : <span class='labelo'>" + node.label + "</span>" +
+          "<br><a href='#' style='color:red' onclick='setlabel(\"" + params.nodes[0] + "\",\"" + node.label + "\")'>Ubah nama</a>" +
+          "<br><br>IP Address : " + node.detail.ip +
           "<br>MAC Address : " + node.detail.mac +
           "</div>"
       }
@@ -322,9 +384,9 @@ $(function () {
   });
 
   network.on("stabilized", function (params) {
-    if (params.iterations > 10) {
-      network.setOptions({ physics: false });
-    }
+    // if (params.iterations > 10) {
+    //   network.setOptions({ physics: false });
+    // }
   });
 
   // Web Socket Error Handling
@@ -346,12 +408,16 @@ $(function () {
       console.log("Server Disconnected")
       socket.connect();
     }
-    console.log(sekarang() + " Disconnected" + reason)
+    console.log(sekarang() + " Web Server terputus " + reason)
     $.notify(sekarang() + " Web Server terputus", "error")
+    let a = confirm("Hubungan dengan Web Server terputus. \nKlik OK untuk reload halaman ini.")
+    if (a) {
+      location.reload(true)
+    }
   });
 
   socket.on('reconnect', (attemptNumber) => {
-    console.log(sekarang() + " Reconnected " + attemptNumber)
+    console.log(sekarang() + " Web Server terhubung " + attemptNumber)
     $.notify(sekarang() + " Web Server terhubung", "success")
   });
 
