@@ -22,7 +22,9 @@ function tampil_info() {
             if (!jQuery.isEmptyObject(daftar[i])) {
                 let tanggal = new Date(new Date() - 60000)
                 if (tanggal <= new Date(daftar[i].tgl)) {
-                    let html = "[" + format_waktu(new Date(daftar[i].tgl)) + "] PC-" + (i + 1) + " mengirimkan traffic ke PC-" + (daftar[i].tujuan + 1) +
+                    let asal = [2,4,6,8]
+                    let tujuan = [1,3,5,7]
+                    let html = "[" + format_waktu(new Date(daftar[i].tgl)) + "] PC-" + asal[i] + " mengirimkan traffic ke PC-" + tujuan[daftar[i].tujuan] +
                         " sebesar " + daftar[i].throughput + " KB/s";
                     $("#info").append(html)
                 }
