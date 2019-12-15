@@ -11,23 +11,37 @@ const net = require('net');
 var daftar = [];
 //daftar alamat telnet client dari GNS3
 var t = [
-    // {
-    //     host: "192.168.213.128",
-    //     port: 5072
-    // },
     {
-        host: "192.168.213.128",
-        port: 5000
+        host: "192.168.186.128",
+        port: 5026
+    },
+    {
+        host: "192.168.186.128",
+        port: 5030
+    },
+    {
+        host: "192.168.186.128",
+        port: 5034
+    },
+    {
+        host: "192.168.186.128",
+        port: 5002
     }
 ]
 //daftar alamat iperf server
 var p = [
     {
-        host: "192.168.111.77"
+        host: "10.10.10.11"
     },
     {
-        host: "192.168.111.78"
-    }
+        host: "10.10.10.13"
+    },
+    {
+        host: "10.10.10.15"
+    },
+    {
+        host: "10.10.10.17"
+    },
 ]
 function telnet(host, port, perintah, data) {
     let n = net.connect({ host: host, port: port });
