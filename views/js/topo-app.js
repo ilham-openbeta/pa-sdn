@@ -38,7 +38,7 @@ var arrows = false;
 //false untuk menggunakan data througput (kbps) sebagai penentu warna link
 //atur batas max KB/s jika util=false 
 var util = false;
-var max_kbps = 10000;
+var max_kbps = 2000;
 
 function sekarang() {
   let today = new Date();
@@ -330,6 +330,7 @@ $(function () {
           "Ke : " +
           "<br>DPID : " + edge.detail.to +
           "<br>OF Port : " + edge.detail.to_port +
+          "<br><br>Throughput : " + edge.label +
           "</div>"
       } else if (edge.group == "link-host") {
         let node = nodes.get(edge.id)
@@ -344,6 +345,7 @@ $(function () {
           "Ke Switch : " +
           "<br>DPID : " + node.detail.to +
           "<br>OF Port : " + node.detail.to_port +
+          "<br><br>Throughput : " + edge.label +
           "</div>"
       }
       $('.overlay').remove();

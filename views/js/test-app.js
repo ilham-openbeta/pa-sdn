@@ -25,7 +25,7 @@ function tampil_info() {
                     let asal = [2,4,6,8]
                     let tujuan = [1,3,5,7]
                     let html = "[" + format_waktu(new Date(daftar[i].tgl)) + "] PC-" + asal[i] + " mengirimkan traffic ke PC-" + tujuan[daftar[i].tujuan] +
-                        " sebesar " + daftar[i].throughput + " KB/s";
+                        " sebesar " + daftar[i].throughput + " KB/s <br>";
                     $("#info").append(html)
                 }
             }
