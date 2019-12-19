@@ -299,17 +299,15 @@ $(function () {
     $('.atombol').remove();
     let html =
       '<div class="kotak">' + "&nbsp;Keterangan :" +
-      '<div class="kotak-warna" style="background-color: #FFFFFF;"></div>' +
-      '<div class="kotak-teks">Keterangan :</div>' +
-      '<div class="kotak-warna" style="background-color: #FF0000;"></div>' +
+      '<br><div class="kotak-warna" style="background-color: #FF0000;"></div>' +
       '<div class="kotak-teks">80 - 100 %</div>' +
-      '<div class="kotak-warna" style="background-color: #FF8000;"></div>' +
+      '<br><div class="kotak-warna" style="background-color: #FF8000;"></div>' +
       '<div class="kotak-teks">60 - 80 %</div>' +
-      '<div class="kotak-warna" style="background-color: #FFFF00;"></div>' +
+      '<br><div class="kotak-warna" style="background-color: #FFFF00;"></div>' +
       '<div class="kotak-teks">40 - 60 %</div>' +
-      '<div class="kotak-warna" style="background-color: #80FF00;"></div>' +
+      '<br><div class="kotak-warna" style="background-color: #80FF00;"></div>' +
       '<div class="kotak-teks">20 - 40 %</div>' +
-      '<div class="kotak-warna" style="background-color: #007FFF;"></div>' +
+      '<br><div class="kotak-warna" style="background-color: #007FFF;"></div>' +
       '<div class="kotak-teks">0 - 20 %</div>' +
       '</div>' +
       '<a href="#" onclick="save()" class="atombol"><div class="tombol">Simpan Bentuk Topologi</div></a>'

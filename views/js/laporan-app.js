@@ -91,7 +91,7 @@ function buat_tabel() {
                     let label = filter_dev[0].dpid
                     if (nodes.length > 0) {
                         let f = nodes.find(a => a.id == ("of:" + filter_dev[0].dpid))
-                        if (typeof (f.label) != "undefined") {
+                        if (typeof (f) != "undefined" && typeof (f.label) != "undefined") {
                             label = f.label
                         }
                     }
@@ -235,10 +235,10 @@ $(function () {
                 if (nodes.length > 0) {
                     let f = nodes.find(a => a.id == data[d].from)
                     let t = nodes.find(a => a.id == data[d].to)
-                    if (typeof (f.label) != "undefined") {
+                    if (typeof (f) != "undefined" && typeof (f.label) != "undefined") {
                         labelfrom = f.label
                     }
-                    if (typeof (t.label) != "undefined") {
+                    if (typeof (t) != "undefined" && typeof (t.label) != "undefined") {
                         labelto = t.label
                     }
                 }
