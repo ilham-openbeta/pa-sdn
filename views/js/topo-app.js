@@ -277,6 +277,10 @@ $(function () {
 
   socket.on("load", function (data) {
     if (data.length > 0 && nodes.length > 0) {
+      if(nodes.get(d[0].id) == null){
+        network.setOptions({ physics: true });
+        network.setOptions({ physics: false });
+      }
       for (d of data) {
         if (nodes.get(d.id) != null) {
           network.moveNode(d.id, d.x, d.y)
