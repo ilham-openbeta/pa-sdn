@@ -1,7 +1,9 @@
 var options = {
   edges: {
     width: 3,
-    color: { color: "#007FFF" },
+    color: {
+      color: "#007FFF"
+    },
     smooth: {
       type: "continuous",
       roundness: 1
@@ -49,7 +51,10 @@ function sekarang() {
 function setlabel(id, lbl) {
   let res = prompt("Masukkan Nama : ", lbl)
   if (res != null) {
-    nodes.update({ id: id, label: res })
+    nodes.update({
+      id: id,
+      label: res
+    })
     $(".labelo").html(res)
     save()
   }
@@ -63,7 +68,10 @@ function save() {
 
 $(function () {
   //pengaturan notifikasi
-  $.notify.defaults({ position: "right bottom", autoHideDelay: 20000 });
+  $.notify.defaults({
+    position: "right bottom",
+    autoHideDelay: 20000
+  });
 
   //ambil daftar perangkat switch
   socket.on("nodes", function (data) {
@@ -86,21 +94,22 @@ $(function () {
         nodes.remove(group);
         // network.setOptions({ physics: true });
         for (i in data) {
-          nodes.add(
-            {
-              id: data[i].id,
-              label: data[i].id,
-              group: "switch",
-              detail: data[i]
-            }
-          );
+          nodes.add({
+            id: data[i].id,
+            label: data[i].id,
+            group: "switch",
+            detail: data[i]
+          });
         }
         //update posisi & label setelah dihapus
         if (group.length > 0) {
           for (d of group) {
             if (nodes.get(d.id) != null) {
               network.moveNode(d.id, d.x, d.y)
-              nodes.update({ id: d.id, label: d.label })
+              nodes.update({
+                id: d.id,
+                label: d.label
+              })
             }
           }
         }
@@ -165,21 +174,22 @@ $(function () {
         nodes.remove(group);
         // network.setOptions({ physics: true });
         for (i in data) {
-          nodes.add(
-            {
-              id: data[i].mac,
-              label: data[i].mac,
-              group: "host",
-              detail: data[i]
-            }
-          );
+          nodes.add({
+            id: data[i].mac,
+            label: data[i].mac,
+            group: "host",
+            detail: data[i]
+          });
         }
         //update posisi & label setelah dihapus
         if (group.length > 0) {
           for (d of group) {
             if (nodes.get(d.id) != null) {
               network.moveNode(d.id, d.x, d.y)
-              nodes.update({ id: d.id, label: d.label })
+              nodes.update({
+                id: d.id,
+                label: d.label
+              })
             }
           }
         }
@@ -222,9 +232,18 @@ $(function () {
       let temp = edges.get();
       //reset warna link
       for (i in temp) {
-        edges.update({ id: temp[i].id, width: 3, color: { color: "#007FFF" } });
+        edges.update({
+          id: temp[i].id,
+          width: 3,
+          color: {
+            color: "#007FFF"
+          }
+        });
         if (speed) {
-          edges.update({ id: temp[i].id, label: "0 KB/s" });
+          edges.update({
+            id: temp[i].id,
+            label: "0 KB/s"
+          });
         }
       }
       for (i in data) {
@@ -257,18 +276,51 @@ $(function () {
         if (link.length > 0) {
           if (speed) {
             let throughput = Math.round((data[i].ifinoctets + data[i].ifoutoctets) / 1000) + " KB/s";
-            edges.update({ id: link[0].id, label: throughput })
+            edges.update({
+              id: link[0].id,
+              label: throughput
+            })
           }
           if (total > 80) {
-            edges.update({ id: link[0].id, width: 7, color: { color: "#FF0000" } })
+            edges.update({
+              id: link[0].id,
+              width: 7,
+              color: {
+                color: "#FF0000"
+              }
+            })
           } else if (total > 60) {
-            edges.update({ id: link[0].id, width: 6, color: { color: "#FF8000" } })
+            edges.update({
+              id: link[0].id,
+              width: 6,
+              color: {
+                color: "#FF8000"
+              }
+            })
           } else if (total > 40) {
-            edges.update({ id: link[0].id, width: 5, color: { color: "#FFFF00" } })
+            edges.update({
+              id: link[0].id,
+              width: 5,
+              color: {
+                color: "#FFFF00"
+              }
+            })
           } else if (total > 20) {
-            edges.update({ id: link[0].id, width: 4, color: { color: "#80FF00" } })
+            edges.update({
+              id: link[0].id,
+              width: 4,
+              color: {
+                color: "#80FF00"
+              }
+            })
           } else if (total > 0) {
-            edges.update({ id: link[0].id, width: 3, color: { color: "#007FFF" } })
+            edges.update({
+              id: link[0].id,
+              width: 3,
+              color: {
+                color: "#007FFF"
+              }
+            })
           }
         }
       }
@@ -277,14 +329,18 @@ $(function () {
 
   socket.on("load", function (data) {
     if (data.length > 0 && nodes.length > 0) {
-      if(nodes.get(data[0].id) == null){
-        network.setOptions({ physics: true });
-        network.setOptions({ physics: false });
+      if (nodes.get(data[0].id) == null) {
+        network.setOptions({
+          physics: true
+        });
       }
       for (d of data) {
         if (nodes.get(d.id) != null) {
           network.moveNode(d.id, d.x, d.y)
-          nodes.update({ id: d.id, label: d.label })
+          nodes.update({
+            id: d.id,
+            label: d.label
+          })
         }
       }
       $.notify(sekarang() + " Koordinat & label diperbarui", "info")
@@ -390,9 +446,11 @@ $(function () {
   });
 
   network.on("stabilized", function (params) {
-    // if (params.iterations > 10) {
-    //   network.setOptions({ physics: false });
-    // }
+    if (params.iterations > 10) {
+      network.setOptions({
+        physics: false
+      });
+    }
   });
 
   // Web Socket Error Handling
