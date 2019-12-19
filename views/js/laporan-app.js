@@ -190,6 +190,7 @@ function buat_tabel() {
             html = "Tidak ada data sesuai tanggal " + format_tgl(from) + " hingga " + format_tgl(to)
             baris.append(html)
         }
+        document.getElementsByClassName("daftar-sw")[0].scrollIntoView({behavior:"smooth"});
     }
 }
 
