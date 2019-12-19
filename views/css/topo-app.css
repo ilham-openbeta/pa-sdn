@@ -19,8 +19,7 @@
 .kotak-teks {
     font-size: 0.8rem;
     position: relative;
-    float: left;
-    display: block;
+    display: inline-block;
     line-height: 20px;
     text-align: center;
     width: 65px;
@@ -28,11 +27,10 @@
 
 .kotak-warna {
     margin: 3px;
-    float: left;
     width: 20px;
     height: 10px;
     position: relative;
-    display: block;
+    display: inline-block;
 }
 
 .kotak {
@@ -40,7 +38,6 @@
     bottom: 20px;
     left: 20px;
     width: 120px;
-    height: 120px;
     position: absolute;
     display: block;
     background-color: white;

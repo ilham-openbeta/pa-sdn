@@ -74,7 +74,7 @@ $(function () {
     for (i in int) {
       let z = int[i].id
       //set data awal grafik jika kosong
-      if (typeof (val[z]) === "undefined") {
+      if (typeof (val[z]) == "undefined") {
         val[z] = []
       }
       if (val[z].length == 0) {

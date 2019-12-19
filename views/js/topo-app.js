@@ -299,6 +299,8 @@ $(function () {
     $('.atombol').remove();
     let html =
       '<div class="kotak">' + "&nbsp;Keterangan :" +
+      '<div class="kotak-warna" style="background-color: #FFFFFF;"></div>' +
+      '<div class="kotak-teks">Keterangan :</div>' +
       '<div class="kotak-warna" style="background-color: #FF0000;"></div>' +
       '<div class="kotak-teks">80 - 100 %</div>' +
       '<div class="kotak-warna" style="background-color: #FF8000;"></div>' +
