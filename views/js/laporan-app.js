@@ -78,7 +78,9 @@ function buat_tabel() {
             if (devices.length == 0) {
                 let list_dev = [...new Set(filter_tgl.map(a => a.dpid))]
                 for (dd of list_dev) {
-                    devices.push({ id: "of:" + dd })
+                    devices.push({
+                        id: "of:" + dd
+                    })
                 }
             }
 
@@ -89,7 +91,7 @@ function buat_tabel() {
                     let label = filter_dev[0].dpid
                     if (nodes.length > 0) {
                         let f = nodes.find(a => a.id == ("of:" + filter_dev[0].dpid))
-                        if(f.label !== undefined){
+                        if (typeof (f.label) !== "undefined") {
                             label = f.label
                         }
                     }
@@ -233,10 +235,10 @@ $(function () {
                 if (nodes.length > 0) {
                     let f = nodes.find(a => a.id == data[d].from)
                     let t = nodes.find(a => a.id == data[d].to)
-                    if (f.label !== undefined) {
+                    if (typeof (f.label) !== "undefined") {
                         labelfrom = f.label
                     }
-                    if (t.label !== undefined) {
+                    if (typeof (t.label) !== "undefined") {
                         labelto = t.label
                     }
                 }

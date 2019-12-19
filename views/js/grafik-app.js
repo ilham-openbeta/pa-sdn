@@ -45,7 +45,9 @@ $(function () {
             val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
           })
         }
-        g[z].updateOptions({ 'file': val[z] });
+        g[z].updateOptions({
+          'file': val[z]
+        });
       }
     }
   })
@@ -72,7 +74,7 @@ $(function () {
     for (i in int) {
       let z = int[i].id
       //set data awal grafik jika kosong
-      if (val[z] === undefined) {
+      if (typeof (val[z]) === "undefined") {
         val[z] = []
       }
       if (val[z].length == 0) {
@@ -155,7 +157,9 @@ $(function () {
             metric.forEach(d => {
               val[z].push([new Date(), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
             })
-            g[z].updateOptions({ 'file': val[z] });
+            g[z].updateOptions({
+              'file': val[z]
+            });
           }
         }
       }
@@ -168,11 +172,13 @@ $(function () {
       for (d of data) {
         $('.perangkat option[value="' + d.id + '"]').html(d.label)
         if (d.id == int[0].dpid) {
-          for (let l = 0; l < $(".dygraph-title").length; l++) {
-            let title = $(".dygraph-title").eq(l).text().split(" ")
-            let html = d.label + " port " + title[2]
-            $(".dygraph-title").eq(l).html(html)
-          }
+          g.forEach((a, i) => {
+            let oldtitle = g[i].getOption("title")
+            let newtitle = d.label + " port " + oldtitle.split(" ")[2]
+            g[i].updateOptions({
+              "title": newtitle
+            })
+          })
         }
       }
     }
