@@ -277,7 +277,7 @@ $(function () {
 
   socket.on("load", function (data) {
     if (data.length > 0 && nodes.length > 0) {
-      if(nodes.get(d[0].id) == null){
+      if(nodes.get(data[0].id) == null){
         network.setOptions({ physics: true });
         network.setOptions({ physics: false });
       }
