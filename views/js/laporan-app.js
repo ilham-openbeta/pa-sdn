@@ -89,7 +89,9 @@ function buat_tabel() {
                     let label = filter_dev[0].dpid
                     if (nodes.length > 0) {
                         let f = nodes.find(a => a.id == ("of:" + filter_dev[0].dpid))
-                        label = f.label
+                        if(f.label !== undefined){
+                            label = f.label
+                        }
                     }
                     html =
                         '<hr><br> <b>Nama Perangkat : ' + label +

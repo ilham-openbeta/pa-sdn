@@ -12,20 +12,20 @@ var daftar = [];
 //daftar alamat telnet client dari GNS3
 var t = [
     {
-        host: "192.168.186.128",
+        host: "192.168.230.128",
+        port: 5022
+    },
+    {
+        host: "192.168.230.128",
         port: 5026
     },
     {
-        host: "192.168.186.128",
+        host: "192.168.230.128",
         port: 5030
     },
     {
-        host: "192.168.186.128",
+        host: "192.168.230.128",
         port: 5034
-    },
-    {
-        host: "192.168.186.128",
-        port: 5002
     }
 ]
 //daftar alamat iperf server

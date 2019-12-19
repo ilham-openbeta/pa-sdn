@@ -19,10 +19,10 @@
 .kotak-teks {
     font-size: 0.8rem;
     position: relative;
+    float: left;
     display: block;
     line-height: 20px;
     text-align: center;
-    float: left;
     width: 65px;
 }
 
