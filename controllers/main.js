@@ -43,7 +43,7 @@ var p = [
         host: "10.10.10.17"
     },
 ]
-function telnet(host, port, perintah, data) {
+async function telnet(host, port, perintah, data) {
     let n = net.connect({ host: host, port: port });
     n.
         on('connect', function () {
