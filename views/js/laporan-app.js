@@ -4,6 +4,7 @@ var socket = io();
 var g = [];
 var val = [];
 var nodes = [];
+var links = [];
 
 Date.prototype.toDateInputValue = (function () {
     var local = new Date(this);
@@ -212,6 +213,7 @@ $(function () {
     })
 
     socket.on("links", function (data) {
+        links = data
         if (data) {
             let html = ""
             $("span#3").text(data.length)
@@ -266,6 +268,48 @@ $(function () {
     socket.on("load", function (data) {
         if (data) {
             nodes = data
+        }
+        if (links.length > 0) {
+            let html = ""
+            html =
+                '<br>Tabel Link' +
+                '<br>' +
+                '<table>' +
+                '<tr>' +
+                '    <th colspan="2">Dari</th>' +
+                '    <th rowspan="2"></th>' +
+                '    <th colspan="2">Ke</th>' +
+                '</tr>' +
+                '<tr>' +
+                '    <th>Nama Perangkat</th>' +
+                '    <th>Port</th>' +
+                '    <th>Nama Perangkat</th>' +
+                '    <th>Port</th>' +
+                '</tr>'
+            for (d in links) {
+                let labelfrom = links[d].from;
+                let labelto = links[d].to;
+                if (nodes.length > 0) {
+                    let f = nodes.find(a => a.id == links[d].from)
+                    let t = nodes.find(a => a.id == links[d].to)
+                    if (typeof (f) != "undefined" && typeof (f.label) != "undefined") {
+                        labelfrom = f.label
+                    }
+                    if (typeof (t) != "undefined" && typeof (t.label) != "undefined") {
+                        labelto = t.label
+                    }
+                }
+                html +=
+                    '<tr>' +
+                    '    <td>' + labelfrom + '</td>' +
+                    '    <td>' + links[d].from_port + '</td>' +
+                    '    <td>&lt;&gt;</td>' +
+                    '    <td>' + labelto + '</td>' +
+                    '    <td>' + links[d].to_port + '</td>' +
+                    '</tr>'
+            }
+            html += '</table>'
+            $(".daftar-link").html(html)
         }
     })
 })

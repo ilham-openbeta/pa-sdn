@@ -60,8 +60,8 @@ async function telnet(host, port, perintah, data) {
                 tgl: new Date()
             }
             io.sockets.emit("info", daftar);
+            n.destroy();
         });
-        n.destroy();
     }).
     on('close', function () {
         console.log('Koneksi tertutup');

@@ -4,6 +4,7 @@ var interfaces = [];
 var socket = io();
 var len = 0;
 var database = [];
+var label = [];
 
 //buat fungsi ubah url & get url berdasar selection
 function set_dpid(params) {
@@ -30,6 +31,24 @@ $(function () {
       int = interfaces.filter(a => a.dpid == interfaces[0].dpid)
     }
     return int
+  }
+
+  function set_label(){
+    if (label.length > 0) {
+      let int = get_int()
+      for (d of label) {
+        $('.perangkat option[value="' + d.id + '"]').html(d.label)
+        if (d.id == int[0].dpid) {
+          g.forEach((a, i) => {
+            let oldtitle = g[i].getOption("title")
+            let newtitle = d.label + " port " + oldtitle.split(" ")[2]
+            g[i].updateOptions({
+              "title": newtitle
+            })
+          })
+        }
+      }
+    }
   }
 
   //ambil data metrik dari influx
@@ -93,6 +112,7 @@ $(function () {
         xlabel: "Waktu"
       });
     }
+    set_label()
   }
 
   //ambil daftar interfaces dari link antar switch
@@ -168,19 +188,8 @@ $(function () {
 
   socket.on("load", function (data) {
     if (data) {
-      let int = get_int()
-      for (d of data) {
-        $('.perangkat option[value="' + d.id + '"]').html(d.label)
-        if (d.id == int[0].dpid) {
-          g.forEach((a, i) => {
-            let oldtitle = g[i].getOption("title")
-            let newtitle = d.label + " port " + oldtitle.split(" ")[2]
-            g[i].updateOptions({
-              "title": newtitle
-            })
-          })
-        }
-      }
+      label = data
+      set_label()
     }
   })
 
