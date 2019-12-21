@@ -5,8 +5,7 @@ var options = {
       color: "#007FFF"
     },
     smooth: {
-      type: "continuous",
-      roundness: 1
+      enabled: false
     },
     font: {
       align: "middle",
