@@ -41,7 +41,7 @@ var arrows = false;
 //false untuk menggunakan data througput (kbps) sebagai penentu warna link
 //atur batas max KB/s jika util=false 
 var util = false;
-var max_kbps = 2000;
+var max_kbps = 5000;
 
 function sekarang() {
   let today = new Date();

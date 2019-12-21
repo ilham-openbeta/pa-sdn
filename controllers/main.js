@@ -133,7 +133,7 @@ module.exports = async function (params) {
 
         // Traffic generator
         socket.on("tg", data => {
-            let cmd = "\x03 iperf3 -c " + p[data.tujuan].host + " -b " + (data.throughput * 8) + "K -t 60\r";
+            let cmd = "\x03 iperf3 -c " + p[data.tujuan].host + " -b " + (data.throughput * 8) + "K -t 120\r";
             telnet(t[data.asal].host, t[data.asal].port, cmd, data);
         })
         socket.emit("info", daftar)
