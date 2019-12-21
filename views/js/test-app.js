@@ -32,7 +32,7 @@ function tampil_info() {
         $("#info").html("")
         for (i in daftar) {
             if (!jQuery.isEmptyObject(daftar[i])) {
-                let tanggal = new Date(new Date() - 60000)
+                let tanggal = new Date(new Date() - 120000)
                 if (tanggal <= new Date(daftar[i].tgl)) {
                     server_check[daftar[i].tujuan] = true
                     let asal = [2, 4, 6, 8]
