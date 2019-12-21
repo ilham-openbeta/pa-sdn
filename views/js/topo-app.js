@@ -6,6 +6,8 @@ var options = {
     },
     smooth: {
       enabled: false
+      // type:"continuous", 
+      // roundness:1
     },
     font: {
       align: "middle",
@@ -327,10 +329,19 @@ $(function () {
   })
 
   socket.on("load", function (data) {
+    if (typeof (data) == "undefined" || data == "" || data.length == 0) {
+      network.setOptions({
+        physics: {
+          solver: "repulsion"
+        }
+      });
+    }
     if (data.length > 0 && nodes.length > 0) {
       if (nodes.get(data[0].id) == null) {
         network.setOptions({
-          physics: true
+          physics: {
+            solver: "repulsion"
+          }
         });
       }
       for (d of data) {
