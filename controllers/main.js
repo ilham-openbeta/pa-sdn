@@ -108,6 +108,8 @@ module.exports = async function (params) {
     io = params;
     let rawdata = fs.readFileSync('./controllers/nodes.json');
     nodes = JSON.parse(rawdata);
+    // inisialisasi data. komentari 4 baris ke bawah jika controller mati agar dapat
+    // menampilkan halaman laporan asalkan database server hidup
     nodes_temp = await onos.get_devices()
     links_temp = await onos.get_links()
     hosts_temp = await onos.get_hosts()
