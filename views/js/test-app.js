@@ -11,6 +11,9 @@ function buat_traffic() {
     let from = parseInt($("#asal").val())
     let to = parseInt($("#tujuan").val())
     let bw = parseInt($("#throughput").val())
+    if(isNaN(bw) || bw == 0){
+        bw = 100
+    }
     if (server_check[to]) {
         let tujuan = [1, 3, 5, 7]
         alert("Server PC-" + tujuan[to] + " sibuk, silahkan pilih PC tujuan yang lainnya")
