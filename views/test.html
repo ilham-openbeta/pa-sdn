@@ -51,22 +51,23 @@
     </nav>
 
     <div class="container">
-        <h2>Traffic Generator</h2>
+        <br>
+        <h3>Traffic Generator</h3>
         <hr style='margin:0.5em 0;border: 1px solid black'>
         Menu ini digunakan untuk membuat traffic pada simulasi SDN.
         Traffic dibuat dengan cara menjalankan perintah iperf dari client ke iperf server.
         perintah ini akan berjalan selama 2 menit. Nilai maksimal throughput adalah 5 Megabyte per detik.
         <br>
         <br>Keterangan :
-        <br>- Jika terdapat pengguna yang membuat traffic dengan <b>perangkat asal</b> yang sama, 
-        maka perintah yang akan berjalan adalah <b>perintah yang terakhir</b>.  
-        <br>- Jika terdapat pengguna yang membuat traffic dengan <b>perangkat tujuan</b> yang sama, 
-        maka perintah <b>tidak akan dijalankan</b>.
+        <br>- Jika <b>perangkat asal</b> yang dipilih trafficnya masih berjalan, 
+        maka perintah traffic generator yang akan berjalan adalah <b>perintah yang terakhir</b>.  
+        <br>- Jika <b>perangkat tujuan</b> yang dipilih trafficnya masih berjalan, 
+        maka perintah traffic generator <b>tidak akan dijalankan</b>.
         <br>- Perangkat di simulasi GNS3 tidak memiliki bandwidth yang stabil, sehingga ada 
-        kemungkinan throughput yang dihasilkan lebih rendah dari yang diinputkan disini.
+        kemungkinan throughput yang dihasilkan lebih rendah dari yang dimasukkan disini.
         <br>
         <br> Berikut ini Topologi Jaringan yang digunakan :
-        <img src="/img/topology.png" alt="topologi"> 
+        <br><img src="/img/topology.png" alt="topologi"> 
         <br>
         <div class="row">
             <div class="col-md-3">
