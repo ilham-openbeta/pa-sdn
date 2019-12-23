@@ -53,6 +53,7 @@ async function telnet(host, port, perintah, data) {
     n.
     on('connect', function () {
         console.log('Telnet terhubung dengan : ' + host + ':' + port);
+        console.log("Menjalanankan perintah " + perintah)
         n.write(perintah, () => {
             daftar[data.asal] = {
                 tujuan: data.tujuan,
