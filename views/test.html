@@ -58,7 +58,10 @@
         Traffic dibuat dengan cara menjalankan perintah iperf dari client ke iperf server.
         Perintah ini akan berjalan selama 2 menit. Nilai maksimal throughput adalah 5 Megabyte per detik.
         <br>
-        <br>Keterangan :
+        <br> Berikut ini Topologi Jaringan yang digunakan :
+        <br><img src="/img/topology.png" alt="topologi" style="max-width: 500px;"> 
+        <div style="height:50px;display:block"></div>
+        <br>Catatan :
         <br>- Jika <b>perangkat asal</b> yang dipilih memiliki traffic yang masih berjalan, 
         maka perintah traffic generator yang akan berjalan adalah <b>perintah yang terakhir</b>.  
         <br>- Jika <b>perangkat tujuan</b> yang dipilih memiliki traffic yang masih berjalan, 
@@ -66,9 +69,7 @@
         <br>- Perangkat di simulasi GNS3 bandwidthnya tidak stabil, sehingga ada 
         kemungkinan throughput yang dihasilkan lebih rendah dari yang dimasukkan disini.
         <br>
-        <br> Berikut ini Topologi Jaringan yang digunakan :
-        <br><img src="/img/topology.png" alt="topologi" style="max-width: 500px;"> 
-        <div style="height:50px;display:block"></div>
+        <br>Atur traffic generator disini :
         <div class="row">
             <div class="col-md-3">
                 Pilih perangkat asal (client)
@@ -105,7 +106,7 @@
         </div>
         <button type="button" class="btn btn-primary" onclick="buat_traffic()">Buat Traffic</button>
         <br>
-        <br>Traffic saat ini :
+        <br>Traffic yang berjalan saat ini :
         <br>
         <div id="info"></div>
         <div style="height:100px;display:block"></div>
