@@ -18,18 +18,7 @@ function buat_traffic() {
         tujuan: to,
         throughput: bw
     }
-    if (daftar.length > 0) {
-        let tanggal = new Date(new Date() - 120000)
-        let me = daftar.find(a => (a.tujuan == to && tanggal <= new Date(a.tgl)))
-        if (me) {
-            let tujuan = [1, 3, 5, 7]
-            alert("Server PC-" + tujuan[to] + " sibuk, silahkan pilih PC tujuan yang lainnya")
-        } else {
-            socket.emit("tg", data)
-        }
-    } else {
-        socket.emit("tg", data)
-    }
+    socket.emit("tg", data)
 }
 
 function tampil_info() {
