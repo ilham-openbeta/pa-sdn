@@ -53,7 +53,7 @@ async function telnet(host, port, perintah, data) {
     n.
     on('connect', function () {
         console.log('Telnet terhubung dengan : ' + host + ':' + port);
-        console.log("Menjalanankan perintah " + perintah)
+        console.log("Menjalankan perintah :" + perintah)
         n.write(perintah, () => {
             daftar[data.asal] = {
                 tujuan: data.tujuan,
@@ -65,7 +65,7 @@ async function telnet(host, port, perintah, data) {
         });
     }).
     on('close', function () {
-        console.log('Koneksi tertutup');
+        console.log('Koneksi telnet tertutup');
         n.destroy();
     }).
     on('error', function (err) {
