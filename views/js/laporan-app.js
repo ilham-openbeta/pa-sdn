@@ -50,20 +50,17 @@ function buat_tabel() {
             if (per == "1") {
                 from = new Date()
                 from.setHours(from.getHours() - 24)
-                to = new Date()
             } else if (per == "2") {
                 from = new Date()
                 from.setDate(from.getDate() - 7)
-                to = new Date()
             } else if (per == "3") {
                 from = new Date()
                 from.setMonth(from.getMonth() - 1)
-                to = new Date()
             } else {
                 from = new Date()
                 from.setFullYear(from.getFullYear() - 1)
-                to = new Date()
             }
+            to = new Date()
         }
         //filter tanggal yang sesuai
         let filter_tgl = database.filter(a => (new Date(a.time) >= from) && (new Date(a.time) <= to))

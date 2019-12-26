@@ -19,6 +19,29 @@ function sekarang() {
   return time
 }
 
+function zoom(periode) {
+  let from, to;
+  if (periode == "1") {
+    from = new Date()
+    from.setHours(from.getHours() - 24)
+  } else if (periode == "2") {
+    from = new Date()
+    from.setDate(from.getDate() - 7)
+  } else if (periode == "3") {
+    from = new Date()
+    from.setMonth(from.getMonth() - 1)
+  } else {
+    from = new Date()
+    from.setFullYear(from.getFullYear() - 1)
+  }
+  to = new Date()
+  g.forEach(function (item, index) {
+    g[index].updateOptions({
+      dateWindow: [from, to]
+    })
+  })
+}
+
 $(function () {
   //filter data berdasar perangkat, hasil list interfaces
   function get_int() {
@@ -33,7 +56,7 @@ $(function () {
     return int
   }
 
-  function set_label(){
+  function set_label() {
     if (label.length > 0) {
       let int = get_int()
       for (d of label) {
@@ -43,7 +66,7 @@ $(function () {
             let oldtitle = g[i].getOption("title")
             let newtitle = d.label + " port " + oldtitle.split(" ")[2]
             g[i].updateOptions({
-              "title": newtitle
+              title: newtitle
             })
           })
         }
@@ -65,7 +88,7 @@ $(function () {
           })
         }
         g[z].updateOptions({
-          'file': val[z]
+          file: val[z]
         });
       }
     }
@@ -104,12 +127,17 @@ $(function () {
       let html = "<div class='grafik'></div><div class='empty-space'></div>"
       $('.container').append(html);
       let container = $(".grafik")[i];
+      let from = new Date()
+      from.setHours(from.getHours() - 24)
+      let to = new Date()
       g[z] = new Dygraph(container, val[z], {
         title: int[i].dpid + " port " + int[i].port,
         drawPoints: true,
+        animatedZooms: true,
         labels: ['Tanggal', 'IN', 'OUT'],
         ylabel: "Throughput (KB/s)",
-        xlabel: "Waktu"
+        xlabel: "Waktu",
+        dateWindow: [from, to]
       });
     }
     set_label()
@@ -178,7 +206,7 @@ $(function () {
               val[z].push([new Date(), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
             })
             g[z].updateOptions({
-              'file': val[z]
+              file: val[z]
             });
           }
         }

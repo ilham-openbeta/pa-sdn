@@ -23,14 +23,16 @@
         .col {
             margin: 10px;
         }
+
         .grafik {
             margin: auto;
             display: block;
             width: 500px;
             height: 200px;
         }
-        .empty-space{
-            display:block;
+
+        .empty-space {
+            display: block;
             width: 500px;
             height: 50px;
         }
@@ -65,6 +67,14 @@
     <div class="container">
         <div class="row">
             <div class="col">Tampilkan Perangkat : <select name="perangkat" class="perangkat" onchange="set_dpid(this.value)"></select></div>
+            <div class="col">Periode yang ditampilkan : 
+                <select name="period" class="period" onchange="zoom(this.value)">
+                    <option value="1" selected>24 Jam Terakhir</option>
+                    <option value="2">1 Minggu Terakhir</option>
+                    <option value="3">1 Bulan Terakhir</option>
+                    <option value="4">1 Tahun Terakhir</option>
+                </select>
+            </div>
         </div>
         <hr style="margin:auto">
         <div class="grafik"></div>
