@@ -56,7 +56,7 @@
         <hr style='margin:0.5em 0;border: 1px solid black'>
         Menu ini digunakan untuk membuat traffic pada simulasi SDN.
         Traffic dibuat dengan cara menjalankan perintah iperf dari client ke iperf server.
-        Perintah ini akan berjalan selama 2 menit. Nilai maksimal throughput adalah 5 Megabyte per detik.
+        Perintah ini akan berjalan selama 2 menit. Nilai maksimal throughput adalah 2 Megabyte per detik.
         Hasil dari traffic generator ini dapat dilihat pada menu Topologi dan Grafik setelah 10 detik.
         <br>
         <br> Berikut ini Topologi Jaringan yang digunakan :
@@ -71,6 +71,9 @@
         atau buat traffic lagi dengan perangkat asal dan tujuan berbeda.  
         <br>- Perangkat di simulasi GNS3 bandwidthnya tidak stabil, sehingga ada 
         kemungkinan throughput yang dihasilkan lebih rendah dari yang dimasukkan disini.
+        <br>
+        <br>PC yang menjadi iperf client : PC-2, PC-4, PC-6, dan PC-8
+        <br>PC yang menjadi iperf server : PC-1, PC-3, PC-5, dan PC-7
         <br>
         <br>Atur traffic generator disini :
         <div class="row">
@@ -104,7 +107,7 @@
                 Masukkan nilai throughput
             </div>
             <div class="col-md-3">
-                <input type="number" min="1" max="5000" step="100" name="throughput" id="throughput" style="width:100px"> KB/s
+                <input type="number" min="1" max="2000" step="100" name="throughput" id="throughput" style="width:100px"> KB/s
             </div>
         </div>
         <button type="button" class="btn btn-primary" onclick="buat_traffic()">Buat Traffic</button>

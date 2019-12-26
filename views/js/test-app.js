@@ -10,8 +10,8 @@ function buat_traffic() {
     let from = parseInt($("#asal").val())
     let to = parseInt($("#tujuan").val())
     let bw = parseInt($("#throughput").val())
-    if (isNaN(bw) || bw == 0 || bw > 5000) {
-        bw = 5000
+    if (isNaN(bw) || bw == 0 || bw > 2000) {
+        bw = 2000
     }
     let data = {
         asal: from,

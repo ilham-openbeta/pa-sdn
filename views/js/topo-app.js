@@ -41,7 +41,7 @@ var arrows = false;
 //false untuk menggunakan data througput (kbps) sebagai penentu warna link
 //atur batas max KB/s jika util=false 
 var util = false;
-var max_kbps = 5000;
+var max_kbps = 2000;
 
 function sekarang() {
   let today = new Date();
@@ -369,6 +369,7 @@ $(function () {
     $('.atombol').remove();
     let html =
       '<div class="kotak">' + "&nbsp;Keterangan :" +
+      '<br> Bandwidth = 16mbps'
       '<br><div class="kotak-warna" style="background-color: #FF0000;"></div>' +
       '<div class="kotak-teks">80 - 100 %</div>' +
       '<br><div class="kotak-warna" style="background-color: #FF8000;"></div>' +
