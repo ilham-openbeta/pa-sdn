@@ -381,6 +381,7 @@ $(function () {
       '<br><div class="kotak-warna" style="background-color: #007FFF;"></div>' +
       '<div class="kotak-teks">0 - 20 %</div>' +
       '</div>' +
+      '<br><span style="font-size: 0.8rem;font-style: italic">* bandwidth = 16mbps</span>' +
       '<a href="#" onclick="save()" class="atombol"><div class="tombol">Simpan Bentuk Topologi</div></a>'
     $('.vis-network').append(html);
   })
