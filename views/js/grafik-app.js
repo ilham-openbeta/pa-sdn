@@ -46,21 +46,19 @@ animate = function (index) {
 };
 
 function zoom(periode) {
-  let from, to;
+  let from = new Date()
+  let to = new Date()
   if (periode == "1") {
-    from = new Date()
-    from.setHours(from.getHours() - 24)
+    from.setHours(from.getHours() - 1)
   } else if (periode == "2") {
-    from = new Date()
+    from.setDate(from.getDate() - 1)
+  } else if (periode == "3") {    
     from.setDate(from.getDate() - 7)
-  } else if (periode == "3") {
-    from = new Date()
+  } else if (periode == "4") {
     from.setMonth(from.getMonth() - 1)
   } else {
-    from = new Date()
     from.setFullYear(from.getFullYear() - 1)
   }
-  to = new Date()
   desired_range = [from.getTime(), to.getTime()]
   g.forEach(function (item, index) {
     animate(index)
@@ -153,7 +151,7 @@ $(function () {
       $('.container').append(html);
       let container = $(".grafik")[i];
       let from = new Date()
-      from.setHours(from.getHours() - 24)
+      from.setHours(from.getHours() - 1)
       let to = new Date()
       g[z] = new Dygraph(container, val[z], {
         title: int[i].dpid + " port " + int[i].port,

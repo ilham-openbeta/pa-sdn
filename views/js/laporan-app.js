@@ -47,20 +47,17 @@ function buat_tabel() {
             to = new Date($('input[name="ke"]').val())
         } else {
             let per = $('select#per').val()
+            from = new Date()
+            to = new Date()
             if (per == "1") {
-                from = new Date()
-                from.setHours(from.getHours() - 24)
+                from.setDate(from.getDate() - 1)
             } else if (per == "2") {
-                from = new Date()
                 from.setDate(from.getDate() - 7)
             } else if (per == "3") {
-                from = new Date()
                 from.setMonth(from.getMonth() - 1)
             } else {
-                from = new Date()
                 from.setFullYear(from.getFullYear() - 1)
             }
-            to = new Date()
         }
         //filter tanggal yang sesuai
         let filter_tgl = database.filter(a => (new Date(a.time) >= from) && (new Date(a.time) <= to))
