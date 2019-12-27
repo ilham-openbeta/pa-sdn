@@ -19,6 +19,32 @@ function sekarang() {
   return time
 }
 
+var desired_range = null,
+  animate;
+
+function approach_range(index) {
+  if (!desired_range) return;
+  let range = g[index].xAxisRange();
+  if (Math.abs(desired_range[0] - range[0]) < 1000 &&
+    Math.abs(desired_range[1] - range[1]) < 1000) {
+    g[index].updateOptions({
+      dateWindow: desired_range
+    })
+  } else {
+    let new_range;
+    new_range = [0.5 * (desired_range[0] + range[0]),
+      0.5 * (desired_range[1] + range[1])
+    ];
+    g[index].updateOptions({
+      dateWindow: new_range
+    })
+    animate(index);
+  }
+}
+animate = function (index) {
+  setTimeout(approach_range, 50, index);
+};
+
 function zoom(periode) {
   let from, to;
   if (periode == "1") {
@@ -35,10 +61,9 @@ function zoom(periode) {
     from.setFullYear(from.getFullYear() - 1)
   }
   to = new Date()
+  desired_range = [from.getTime(), to.getTime()]
   g.forEach(function (item, index) {
-    g[index].updateOptions({
-      dateWindow: [from, to]
-    })
+    animate(index)
   })
 }
 
@@ -137,7 +162,7 @@ $(function () {
         labels: ['Tanggal', 'IN', 'OUT'],
         ylabel: "Throughput (KB/s)",
         xlabel: "Waktu",
-        dateWindow: [from, to]
+        dateWindow: [from.getTime(), to.getTime()]
       });
     }
     set_label()
