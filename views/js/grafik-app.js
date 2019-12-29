@@ -153,7 +153,7 @@ $(function () {
       $('.container').append(html);
       let container = $(".grafik")[i];
       let from = new Date()
-      from.setMinutes(from.getMinutes - 5)
+      from.setMinutes(from.getMinutes() - 5)
       let to = new Date()
       g[z] = new Dygraph(container, val[z], {
         title: int[i].dpid + " port " + int[i].port,
