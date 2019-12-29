@@ -49,12 +49,14 @@ function zoom(periode) {
   let from = new Date()
   let to = new Date()
   if (periode == "1") {
-    from.setHours(from.getHours() - 1)
+    from.setMinutes(from.getMinutes() - 5)
   } else if (periode == "2") {
+    from.setHours(from.getHours() - 1)
+  } else if (periode == "3") {
     from.setDate(from.getDate() - 1)
-  } else if (periode == "3") {    
-    from.setDate(from.getDate() - 7)
   } else if (periode == "4") {
+    from.setDate(from.getDate() - 7)
+  } else if (periode == "5") {
     from.setMonth(from.getMonth() - 1)
   } else {
     from.setFullYear(from.getFullYear() - 1)
@@ -151,7 +153,7 @@ $(function () {
       $('.container').append(html);
       let container = $(".grafik")[i];
       let from = new Date()
-      from.setHours(from.getHours() - 1)
+      from.setMinutes(from.getMinutes - 5)
       let to = new Date()
       g[z] = new Dygraph(container, val[z], {
         title: int[i].dpid + " port " + int[i].port,
@@ -228,8 +230,25 @@ $(function () {
             metric.forEach(d => {
               val[z].push([new Date(), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
             })
+            let from = new Date()
+            let to = new Date()
+            let periode = $(".period option:selected").val()
+            if (periode == "1") {
+              from.setMinutes(from.getMinutes() - 5)
+            } else if (periode == "2") {
+              from.setHours(from.getHours() - 1)
+            } else if (periode == "3") {
+              from.setDate(from.getDate() - 1)
+            } else if (periode == "4") {
+              from.setDate(from.getDate() - 7)
+            } else if (periode == "5") {
+              from.setMonth(from.getMonth() - 1)
+            } else {
+              from.setFullYear(from.getFullYear() - 1)
+            }
             g[z].updateOptions({
-              file: val[z]
+              file: val[z],
+              dateWindow: [from.getTime(), to.getTime()]
             });
           }
         }
