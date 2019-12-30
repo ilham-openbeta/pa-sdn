@@ -61,7 +61,7 @@ async function telnet(host, port, perintah, data) {
                 tgl: new Date()
             }
             io.sockets.emit("info", daftar);
-            n.destroy();
+            setTimeout(()=>{n.destroy()},1000)
         });
     }).
     on('close', function () {
