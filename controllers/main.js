@@ -52,27 +52,27 @@ async function telnet(host, port, perintah, data) {
     });
     n.
     on('connect', function () {
-        console.log('Telnet terhubung dengan : ' + host + ':' + port);
-        console.log("Menjalankan perintah :" + perintah)
+        console.log(data.asal + ' Telnet terhubung dengan : ' + host + ':' + port);
         n.write(perintah, () => {
             daftar[data.asal] = {
                 tujuan: data.tujuan,
                 throughput: data.throughput,
                 tgl: new Date()
             }
+            console.log(data.asal + " Menjalankan perintah :" + perintah)
             io.sockets.emit("info", daftar);
             setTimeout(()=>{n.destroy()},1000)
         });
     }).
     on('close', function () {
-        console.log('Koneksi telnet tertutup');
+        console.log(data.asal + ' Koneksi telnet tertutup');
         n.destroy();
     }).
     on('error', function (err) {
         console.log(err)
     }).
     on('data', function (data) {
-        console.log("Telnet> " + data)
+        // console.log("Telnet> " + data)
     });
 }
 
