@@ -45,21 +45,31 @@ animate = function (index) {
   setTimeout(approach_range, 50, index);
 };
 
-function zoom(periode) {
+function zoom(per) {
   let from = new Date()
   let to = new Date()
-  if (periode == "1") {
-    from.setMinutes(from.getMinutes() - 5)
-  } else if (periode == "2") {
+  if (per == "1") {
+    from.setMinutes(from.getMinutes() - 15)
+  } else if (per == "2") {
+    from.setMinutes(from.getMinutes() - 30)
+  } else if (per == "3") {
     from.setHours(from.getHours() - 1)
-  } else if (periode == "3") {
+  } else if (per == "4") {
+    from.setHours(from.getHours() - 6)
+  } else if (per == "5") {
+    from.setHours(from.getHours() - 12)
+  } else if (per == "6") {
     from.setDate(from.getDate() - 1)
-  } else if (periode == "4") {
+  } else if (per == "7") {
     from.setDate(from.getDate() - 7)
-  } else if (periode == "5") {
+  } else if (per == "8") {
     from.setMonth(from.getMonth() - 1)
-  } else {
+  } else if (per == "9") {
+    from.setMonth(from.getMonth() - 6)
+  } else if (per == "10") {
     from.setFullYear(from.getFullYear() - 1)
+  } else {
+    from.setMinutes(from.getMinutes() - 5)
   }
   desired_range = [from.getTime(), to.getTime()]
   g.forEach(function (item, index) {
@@ -232,19 +242,29 @@ $(function () {
             })
             let from = new Date()
             let to = new Date()
-            let periode = $(".period option:selected").val()
-            if (periode == "1") {
-              from.setMinutes(from.getMinutes() - 5)
-            } else if (periode == "2") {
+            let per = $(".period option:selected").val()
+            if (per == "1") {
+              from.setMinutes(from.getMinutes() - 15)
+            } else if (per == "2") {
+              from.setMinutes(from.getMinutes() - 30)
+            } else if (per == "3") {
               from.setHours(from.getHours() - 1)
-            } else if (periode == "3") {
+            } else if (per == "4") {
+              from.setHours(from.getHours() - 6)
+            } else if (per == "5") {
+              from.setHours(from.getHours() - 12)
+            } else if (per == "6") {
               from.setDate(from.getDate() - 1)
-            } else if (periode == "4") {
+            } else if (per == "7") {
               from.setDate(from.getDate() - 7)
-            } else if (periode == "5") {
+            } else if (per == "8") {
               from.setMonth(from.getMonth() - 1)
-            } else {
+            } else if (per == "9") {
+              from.setMonth(from.getMonth() - 6)
+            } else if (per == "10") {
               from.setFullYear(from.getFullYear() - 1)
+            } else {
+              from.setMinutes(from.getMinutes() - 5)
             }
             g[z].updateOptions({
               file: val[z],
