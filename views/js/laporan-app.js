@@ -50,11 +50,23 @@ function buat_tabel() {
             from = new Date()
             to = new Date()
             if (per == "1") {
-                from.setDate(from.getDate() - 1)
+                from.setMinutes(from.getMinutes() - 15)
             } else if (per == "2") {
-                from.setDate(from.getDate() - 7)
+                from.setMinutes(from.getMinutes() - 30)
             } else if (per == "3") {
+                from.setHours(from.getHours() - 1)
+            } else if (per == "4") {
+                from.setHours(from.getHours() - 6)
+            } else if (per == "5") {
+                from.setHours(from.getHours() - 12)
+            } else if (per == "6") {
+                from.setDate(from.getDate() - 1)
+            } else if (per == "7") {
+                from.setDate(from.getDate() - 7)
+            } else if (per == "8") {
                 from.setMonth(from.getMonth() - 1)
+            } else if (per == "9") {
+                from.setMonth(from.getMonth() - 6)
             } else {
                 from.setFullYear(from.getFullYear() - 1)
             }
@@ -64,7 +76,8 @@ function buat_tabel() {
         if (filter_tgl.length != 0) {
             let c = 0;
             html =
-                '<br>Laporan statistik throughput dari ' + format_tgl(from) + ' hingga ' + format_tgl(to) +
+                '<br>Laporan statistik throughput dari tanggal ' + format_tgl(from) + ' pukul ' + format_waktu(from) + 
+                ' hingga tanggal ' + format_tgl(to) + ' pukul ' + format_waktu(to) +
                 '<br>Keterangan : tidak menampilkan perangkat dan port yang tidak memiliki data' +
                 '<br>'
             baris.append(html)
