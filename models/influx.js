@@ -34,31 +34,60 @@ function db_cek() {
 function insert_metrics(data) {
   db_cek().then(() => {
     for (i in data) {
-      influx.writePoints([
-        {
-          measurement: 'throughput',
-          tags: {
-            dpid: data[i].of_dpid,
-            port: data[i].of_port,
-            ip: data[i].ip,
-            ifspeed: data[i].ifspeed
-          },
-          fields: {
-            ifinutilization: data[i].ifinutilization,
-            ifoututilization: data[i].ifoututilization,
-            ifinoctets: data[i].ifinoctets,
-            ifoutoctets: data[i].ifoutoctets
-          },
-        }
-      ]).catch(err => console.error(new Date() + "[InfluxDB] Gagal entry data ke database"))
+      influx.writePoints([{
+        measurement: 'throughput',
+        tags: {
+          dpid: data[i].of_dpid,
+          port: data[i].of_port,
+          ip: data[i].ip,
+          ifspeed: data[i].ifspeed
+        },
+        fields: {
+          ifinutilization: data[i].ifinutilization,
+          ifoututilization: data[i].ifoututilization,
+          ifinoctets: data[i].ifinoctets,
+          ifoutoctets: data[i].ifoutoctets
+        },
+      }]).catch(err => console.error(new Date() + "[InfluxDB] Gagal entry data ke database"))
     }
   }).catch(err => console.error(new Date() + "[InfluxDB] Gagal memasukkan data ke database"))
 }
 
-function get_metrics() {
+function get_metrics(data) {
   return db_cek().then(() => {
-    return influx.query('select time,dpid,port,ifinoctets,ifoutoctets,ifspeed,ip,ifinutilization,ifoututilization from throughput')
-  }).catch(err => console.error(new Date() + "[InfluxDB] Gagal mengambil data dari database"))
+    let select = 'SELECT time,dpid,port,ip,ifinoctets,ifoutoctets,ifinutilization,ifoututilization FROM throughput'
+    let query = `${select}`
+
+    if (data) {
+      // ada dpid
+      if (data.dpid != '') {
+        if ((data.start != '') && (data.end != '')) {
+          // ada dpid start end
+          query = `${select} WHERE dpid='${data.dpid}' AND time>=${data.start} AND time<=${data.end}`
+        } else if (data.start != '') {
+          // ada dpid start
+          query = `${select} WHERE dpid='${data.dpid}' AND time>=${data.start}`
+        } else {
+          // ada dpid
+          query = `${select} WHERE dpid='${data.dpid}'`
+        }
+      } else {
+        if ((data.start != '') && (data.end != '')) {
+          // ada start end
+          query = `${select} WHERE time>=${data.start} AND time<=${data.end}`
+        } else if (data.start != '') {
+          // ada start
+          query = `${select} WHERE time>=${data.start}`
+        } else {
+          // all
+          query = `${select}`
+        }
+      }
+    }
+
+    console.log(query)
+    return influx.query(query)
+  }).catch(err => console.error(new Date() + "[InfluxDB] Gagal mengambil data dari database\n" + err))
 }
 
 module.exports = {

@@ -15,20 +15,20 @@ const net = require('net');
 var daftar = [];
 //daftar alamat telnet client dari GNS3
 var t = [{
-        host: "192.168.140.128",
+        host: "192.168.230.128",
+        port: 5022
+    },
+    {
+        host: "192.168.230.128",
         port: 5026
     },
     {
-        host: "192.168.140.128",
+        host: "192.168.230.128",
         port: 5030
     },
     {
-        host: "192.168.140.128",
+        host: "192.168.230.128",
         port: 5034
-    },
-    {
-        host: "192.168.140.128",
-        port: 5038
     }
 ]
 //daftar alamat iperf server
@@ -119,9 +119,9 @@ module.exports = async function (params) {
         socket.emit("nodes", nodes_temp)
         socket.emit("links", links_temp)
         socket.emit("hosts", hosts_temp)
-        influx.get_metrics().then(res => {
-            socket.emit("init", res)
-        })
+        // influx.get_metrics().then(res => {
+        //     socket.emit("init", res)
+        // })
         socket.emit("metrics", metrics_temp)
         socket.emit("load", nodes)
 

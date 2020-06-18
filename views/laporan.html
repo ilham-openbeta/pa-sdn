@@ -10,11 +10,13 @@
     </title>
     <link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/lib/dygraph.css">
+    <link rel="stylesheet" type="text/css" href="/css/lib/all.min.css">
     <script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/lib/socket.io.js"></script>
     <script type="text/javascript" src="/js/lib/dygraph.min.js"></script>
     <script type="text/javascript" src="/js/lib/notify.min.js"></script>
+    <script type="text/javascript" src="/js/lib/xlsx.full.min.js"></script>
     <script type="text/javascript" src="/js/laporan-app.js"></script>
 </head>
 
@@ -66,6 +68,7 @@
             .no-print {
                 display: none !important;
             }
+
             .daftar-sw {
                 page-break-before: always;
             }
@@ -80,7 +83,7 @@
             <br> Jumlah Switch Terhubung : <span id="1"> 0 </span>
             <br> Jumlah Host Terhubung : <span id="2"> 0 </span>
             <br> Jumlah Link : <span id="3"> 0 </span>
-            <div class="daftar-link"></div> 
+            <div class="daftar-link"></div>
             <div class="no-print">
                 <br>Tampilkan Laporan :
                 <br> <input type="radio" name="periode" id="periode" value="a" checked="checked">
@@ -99,7 +102,11 @@
                 </select>
                 <br> <input type="radio" name="periode" id="periode" value="b">
                 Jangka waktu dari <input type="date" name="dari" id="dari"> hingga <input type="date" name="ke" id="ke">
-                <br> <button type="button" class="btn btn-primary" onclick="buat_tabel()">Go</button>
+                <br> <button type="button" class="btn1 btn btn-primary" onclick="buat_tabel()">Go</button>
+                <button class="btn2 btn btn-primary" type="button" style="display:none" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                </button>
             </div>
             <br>
             <div class="daftar-sw"></div>

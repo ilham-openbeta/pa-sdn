@@ -78,6 +78,8 @@ function zoom(per) {
 }
 
 $(function () {
+  var once = true;
+
   //filter data berdasar perangkat, hasil list interfaces
   function get_int() {
     let int;
@@ -110,24 +112,24 @@ $(function () {
   }
 
   //ambil data metrik dari influx
-  socket.on("init", function (data) {
-    if (data) {
-      let int = get_int()
-      for (i in int) {
-        let z = int[i].id
-        let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
-        if (metric.length != 0) {
-          val[z] = []
-          metric.forEach(d => {
-            val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
-          })
-        }
-        g[z].updateOptions({
-          file: val[z]
-        });
-      }
-    }
-  })
+  // socket.on("init", function (data) {
+  //   if (data) {
+  //     let int = get_int()
+  //     for (i in int) {
+  //       let z = int[i].id
+  //       let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
+  //       if (metric.length != 0) {
+  //         val[z] = []
+  //         metric.forEach(d => {
+  //           val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
+  //         })
+  //       }
+  //       g[z].updateOptions({
+  //         file: val[z]
+  //       });
+  //     }
+  //   }
+  // })
 
   function grafik() {
     //buat opsi pilihan perangkat
@@ -141,6 +143,45 @@ $(function () {
     for (d in dpid) {
       let opsi = "<option value=" + dpid[d] + ">" + dpid[d] + "</option>"
       $('.perangkat').append(opsi);
+    }
+
+    if (once) {
+      let url = new URL(window.location.href);
+      let id = url.searchParams.get("dpid");
+      let dpid2 = ""
+      if (id) {
+        dpid2 = id.split(":")[1]
+      } else {
+        dpid2 = dpid[0].split(":")[1]
+      }
+
+      //ambil data metrik dari influx
+      $.ajax({
+          method: "GET",
+          url: "tabel",
+          data: {
+            dpid: dpid2
+          }
+        })
+        .done(function (data) {
+          if (data) {
+            let int = get_int()
+            for (i in int) {
+              let z = int[i].id
+              let metric = data.filter(a => (("of:" + a.dpid) == int[i].dpid) && (a.port == int[i].port))
+              if (metric.length != 0) {
+                val[z] = []
+                metric.forEach(d => {
+                  val[z].push([new Date(d.time), Math.round(d.ifinoctets / 1000), Math.round(d.ifoutoctets / 1000)]);
+                })
+              }
+              g[z].updateOptions({
+                file: val[z]
+              });
+            }
+          }
+        });
+      once = false
     }
 
     //buat grafik
