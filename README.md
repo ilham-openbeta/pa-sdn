@@ -1,5 +1,5 @@
 # Sistem Pemantauan Throughput SDN
-Sistem pemantauan SDN ini merupakan aplikasi web yang dapat digunakan untuk memantau throughput pada SDN dengan memanfaatkan API ONOS (SDN Controller) dan sFlow-RT (sFlow Collector).
+Sistem pemantauan SDN ini merupakan aplikasi web yang dapat digunakan untuk memantau throughput pada SDN dengan memanfaatkan API ONOS (SDN Controller) dan sFlow-RT (sFlow Collector). Cara membuat SDN bisa dilihat di [blog saya](https://rearm.blogspot.com/).
 
 Fitur :
 - Visualisasi topologi jaringan secara realtime
@@ -22,10 +22,10 @@ Fitur :
 ## Cara Install :
 
 Syarat kebutuhan aplikasi :
-- ONOS
-- sFlow-RT
-- Node.js
-- InfluxDB
+- ONOS (Saya menggunakan versi 2.1.0)
+- sFlow-RT (Saya menggunakan versi 3.0)
+- Node.js (Saya menggunakan versi 13.2.0)
+- InfluxDB (Saya menggunakan versi 1.7.9)
 
 ### Install Node.js
 Lihat [Install Node.js](https://github.com/nodesource/distributions/blob/master/README.md).
@@ -49,3 +49,35 @@ Jalankan aplikasi dengan perintah berikut.
 ```sh
 $ sudo npm run start
 ```
+
+## TODO
+- Optimasi web socket ONOS
+Cek perbedaan jumlah data sebelum dikirim ke client. Saat ini perbedaan dicek ketika data sampai di client. Seharusnya data yg dikirim hanya perangkat yang berubah saja, bukan data semua perangkat dikirim.
+
+- Error notification
+Memberi notifikasi ke client jika ada hubungan akses ke controller, collector, atau DB yang terputus.
+
+- Per Device connection notification
+Prinsip kerjanya kurang lebih sama seperti error notification, tetapi untuk mengawasi perubahan status hubungan perangkat switch.
+
+- Mengolah data flow
+Saat ini data yang diolah hanya data metrik.
+
+- Ubah logika sisi client jika terjadi perubahan jumlah perangkat
+saat ini :
+hapus semua kemudian buat ulang
+solusi :
+pisah kode untuk initialisasi dan perubahan perangkat
+cari yang tambah atau kurang dengan
+loop data onos, cek id perangkat apakah ada atau tidak, 
+jika tidak, tambahkan perangkat yang tidak ada
+loop data variabel, cek id perangkat apakah ada atau tidak, 
+jika tidak, hapus perangkat yang tidak ada
+
+- Sinkronisasi data client server
+Saat ini jika websocket mati maka akan ada gap/kekosongan data jika halaman tidak direload.
+
+- Database call dibuat REST API nya.
+
+## Lisensi
+Jika tidak ada tulisan lisensi pada file source code berarti lisensinya MIT (bebas digunakan), tapi lebih baik kalian memberi tahu saya jika mengembangkan aplikasi ini :)
