@@ -79,5 +79,8 @@ Saat ini jika websocket mati maka akan ada gap/kekosongan data jika halaman tida
 
 - Database call dibuat REST API nya.
 
+## Catatan
+Aplikasi ini dibuat untuk menyelesaikan Tugas Akhir sebagai syarat kelulusan, tetapi hingga tanggal commit ini belum ada jurnal yang saya publikasikan.
+
 ## Lisensi
 Jika tidak ada tulisan lisensi pada file source code berarti lisensinya MIT (bebas digunakan), tapi lebih baik kalian memberi tahu saya jika mengembangkan aplikasi ini :)
